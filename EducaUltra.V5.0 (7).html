@@ -1,0 +1,3014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EducaUltra.V5.0">
+    
+    <title>EducaUltra.V5.0 - Login</title>
+    
+    <!-- Ícone Personalizado Embutido (SVG) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%233b82f6'/><stop offset='1' stop-color='%231e3a8a'/></linearGradient></defs><rect x='8' y='8' width='84' height='84' rx='20' fill='url(%23g)'/><rect x='22' y='28' width='28' height='44' fill='%23fffbeb'/><rect x='50' y='28' width='28' height='44' fill='%23fef3c7'/><line x1='50' y1='28' x2='50' y2='72' stroke='%23b45309' stroke-width='3'/><line x1='26' y1='36' x2='46' y2='36' stroke='%239ca3af' stroke-width='2'/><line x1='26' y1='44' x2='46' y2='44' stroke='%239ca3af' stroke-width='2'/><line x1='54' y1='36' x2='74' y2='36' stroke='%239ca3af' stroke-width='2'/><line x1='54' y1='44' x2='74' y2='44' stroke='%239ca3af' stroke-width='2'/><circle cx='72' cy='22' r='8' fill='%23f59e0b'/></svg>">
+    
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%233b82f6'/><stop offset='1' stop-color='%231e3a8a'/></linearGradient></defs><rect x='8' y='8' width='84' height='84' rx='20' fill='url(%23g)'/><rect x='22' y='28' width='28' height='44' fill='%23fffbeb'/><rect x='50' y='28' width='28' height='44' fill='%23fef3c7'/><line x1='50' y1='28' x2='50' y2='72' stroke='%23b45309' stroke-width='3'/><circle cx='72' cy='22' r='8' fill='%23f59e0b'/></svg>">
+    
+    <!-- Firebase (Ranking em Tempo Real) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4/fonts/remixicon.css">
+    
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        
+        :root {
+            --azul-escuro: #1e3a8a;
+            --azul: #3b82f6;
+            --roxo: #7c3aed;
+            --dourado: #f59e0b;
+            --fundo: #f8fafc;
+            --cartao: #ffffff;
+            --texto: #0f172a;
+            --texto-claro: #64748b;
+            --borda: #e2e8f0;
+        }
+        
+        .dark {
+            --fundo: #0f172a;
+            --cartao: #1e293b;
+            --texto: #f1f5f9;
+            --texto-claro: #94a3b8;
+            --borda: #334155;
+        }
+        
+        body { 
+            background: var(--fundo); 
+            color: var(--texto); 
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+        
+        .cartao { 
+            background: var(--cartao); 
+            border-radius: 1rem; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid var(--borda);
+            transition: all 0.3s ease;
+        }
+        
+        .cartao-hover:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 24px rgba(30, 58, 138, 0.12); 
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .btn-gradiente {
+            background: linear-gradient(135deg, var(--azul), var(--roxo));
+            color: white;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-gradiente:hover {
+            opacity: 0.92;
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+        }
+        
+        .btn-dourado {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-dourado:hover { opacity: 0.92; transform: scale(1.02); }
+        
+        .tab-ativo {
+            background: var(--cartao) !important;
+            color: var(--azul) !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        
+        .escondido { display: none !important; }
+        
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, var(--azul), var(--roxo));
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 500;
+            z-index: 9999;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        
+        .toast.mostrar { transform: translateX(-50%) translateY(0); }
+        
+        .toast.erro { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .toast.sucesso { background: linear-gradient(135deg, #16a34a, #15803d); }
+        
+        .carga {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: girar 0.8s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        @keyframes girar { to { transform: rotate(360deg); } }
+        
+        .gradiente-texto {
+            background: linear-gradient(135deg, var(--azul), var(--roxo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .flip-card { perspective: 1000px; }
+        .flip-inner { transition: transform 0.5s; transform-style: preserve-3d; position: relative; }
+        .flip-inner.virado { transform: rotateY(180deg); }
+        .flip-frente, .flip-verso { backface-visibility: hidden; }
+        .flip-verso { transform: rotateY(180deg); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        /* Tela de Login */
+        .tela-login {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #1e3a8a 100%);
+            background-size: 400% 400%;
+            animation: gradienteAnimado 15s ease infinite;
+        }
+        
+        @keyframes gradienteAnimado {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .input-login {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.2s;
+            outline: none;
+        }
+        
+        .input-login:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .input-erro {
+            border-color: #dc2626 !important;
+            animation: shake 0.4s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        
+        .aba-login {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            color: #94a3b8;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .aba-login.ativa {
+            color: #1e3a8a;
+            border-bottom-color: #3b82f6;
+        }
+        
+        /* Navegação inferior mobile */
+        .nav-inferior {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--cartao);
+            border-top: 1px solid var(--borda);
+            z-index: 100;
+            padding: 8px 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-inferior { display: flex; justify-content: space-around; }
+            body { padding-bottom: 80px; }
+            .tela-login { padding: 10px; }
+            .login-card { padding: 1.5rem; }
+        }
+        
+        .nav-inferior button {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 8px 4px;
+            border: none;
+            background: transparent;
+            color: var(--texto-claro);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .nav-inferior button.ativo { color: var(--azul); }
+        .nav-inferior button i { font-size: 20px; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--borda); border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<!-- ==================== TELA DE LOGIN ==================== -->
+<div id="telaLogin" class="tela-login">
+    <div class="login-card">
+        <!-- Logo -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-3" 
+                 style="background: linear-gradient(135deg, #3b82f6, #1e3a8a);">
+                <svg width="36" height="36" viewBox="0 0 100 100">
+                    <rect x="22" y="28" width="28" height="44" fill="#fffbeb"/>
+                    <rect x="50" y="28" width="28" height="44" fill="#fef3c7"/>
+                    <line x1="50" y1="28" x2="50" y2="72" stroke="#b45309" stroke-width="3"/>
+                    <circle cx="72" cy="22" r="8" fill="#f59e0b"/>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold gradiente-texto">EducaUltra.V5.0</h1>
+            <p class="text-sm text-gray-500 mt-1">📚 Do Fundamental à Faculdade</p>
+        </div>
+        
+        <!-- Abas Login / Cadastro -->
+        <div class="flex mb-6 border-b border-gray-200">
+            <button type="button" class="aba-login ativa flex-1" onclick="mostrarAbaLogin('login'); return false;" id="abaLoginBtn">
+                🔐 Entrar
+            </button>
+            <button type="button" class="aba-login flex-1" onclick="mostrarAbaLogin('cadastro'); return false;" id="abaCadastroBtn">
+                ✨ Criar Conta
+            </button>
+        </div>
+        
+        <!-- Formulário de Login -->
+        <form id="formLogin" onsubmit="fazerLogin(event)">
+            <div class="mb-4">
+                <label class="text-sm font-medium text-gray-700 block mb-1">📧 E-mail</label>
+                <div class="relative">
+                    <i class="ri-mail-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="email" id="loginEmail" class="input-login" placeholder="seu@email.com" required autocomplete="off" autocapitalize="off" spellcheck="false">
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="text-sm font-medium text-gray-700 block mb-1">🔒 Senha</label>
+                <div class="relative">
+                    <i class="ri-lock-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="password" id="loginSenha" class="input-login" placeholder="Sua senha" required minlength="4" autocomplete="off">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-gradiente w-full py-3 text-base">
+                Entrar no EducaUltra.V5.0
+            </button>
+        </form>
+        
+        <!-- Formulário de Cadastro -->
+        <form id="formCadastro" class="escondido" onsubmit="fazerCadastro(event)">
+            <div class="mb-4">
+                <label class="text-sm font-medium text-gray-700 block mb-1">👤 Seu Nome</label>
+                <div class="relative">
+                    <i class="ri-user-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="text" id="cadastroNome" class="input-login" placeholder="Como quer ser chamado?" required autocomplete="off">
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="text-sm font-medium text-gray-700 block mb-1">📧 E-mail</label>
+                <div class="relative">
+                    <i class="ri-mail-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="email" id="cadastroEmail" class="input-login" placeholder="seu@email.com" required autocomplete="off" autocapitalize="off" spellcheck="false">
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="text-sm font-medium text-gray-700 block mb-1">🔒 Senha (mínimo 4 caracteres)</label>
+                <div class="relative">
+                    <i class="ri-lock-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="password" id="cadastroSenha" class="input-login" placeholder="Crie uma senha" required minlength="4" autocomplete="off">
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="text-sm font-medium text-gray-700 block mb-1">🔒 Confirmar Senha</label>
+                <div class="relative">
+                    <i class="ri-lock-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="password" id="cadastroSenha2" class="input-login" placeholder="Repita a senha" required minlength="4" autocomplete="off">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-dourado w-full py-3 text-base">
+                ✨ Criar Minha Conta
+            </button>
+        </form>
+        
+        <p class="text-xs text-center text-gray-400 mt-6">
+            💾 Seus dados são salvos localmente no seu navegador<br>
+            Use a opção "Backup" para sincronizar entre aparelhos
+        </p>
+    </div>
+</div>
+
+<!-- ==================== APLICATIVO PRINCIPAL ==================== -->
+<div id="appPrincipal" class="escondido">
+    
+    <!-- Cabeçalho -->
+    <header class="sticky top-0 z-50 border-b" style="background: var(--cartao); border-color: var(--borda); backdrop-filter: blur(10px);">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div style="width:40px;height:40px;background:linear-gradient(135deg,#3b82f6,#1e3a8a);border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;">
+                    <svg width="22" height="22" viewBox="0 0 100 100">
+                        <rect x="22" y="28" width="28" height="44" fill="#fffbeb"/>
+                        <rect x="50" y="28" width="28" height="44" fill="#fef3c7"/>
+                        <line x1="50" y1="28" x2="50" y2="72" stroke="#b45309" stroke-width="4"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold gradiente-texto leading-tight">EducaUltra.V5.0</h1>
+                    <p class="text-xs" style="color: var(--texto-claro);">Olá, <span id="nomeUsuario">Usuário</span> 👋</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <select id="nivelSelect" onchange="mudarNivel()" 
+                    class="text-sm border rounded-lg px-2 py-2 hidden sm:block outline-none"
+                    style="background: var(--cartao); border-color: var(--borda); color: var(--texto);">
+                    <option value="fundamental1">Fundamental 1</option>
+                    <option value="fundamental2">Fundamental 2</option>
+                    <option value="medio">Ensino Médio</option>
+                    <option value="enem">ENEM / Vestibular</option>
+                    <option value="faculdade">Faculdade</option>
+                </select>
+                
+                <button onclick="abrirMenuUsuario()" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                    style="background: linear-gradient(135deg, #7c3aed, #5b21b6);" title="Minha Conta">
+                    <span id="iniciaisUsuario">U</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Menu Usuário -->
+    <div id="menuUsuario" class="escondido fixed inset-0 z-[60]" onclick="fecharMenuUsuario(event)">
+        <div class="absolute top-16 right-4 cartao p-2 w-64" onclick="event.stopPropagation()">
+            <div class="p-3 border-b mb-2" style="border-color: var(--borda);">
+                <p class="font-semibold" id="menuNome">Usuário</p>
+                <p class="text-xs" style="color: var(--texto-claro);" id="menuEmail">email</p>
+            </div>
+            <button onclick="alternarTema(); fecharMenuUsuario();" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2">
+                <i class="ri-moon-line"></i> <span id="textoTema">Modo Escuro</span>
+            </button>
+            <button onclick="exportarDados(); fecharMenuUsuario();" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2">
+                <i class="ri-download-cloud-line"></i> 💾 Exportar Backup
+            </button>
+            <button onclick="document.getElementById('importarArquivo').click(); fecharMenuUsuario();" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2">
+                <i class="ri-upload-cloud-line"></i> 📥 Importar Backup
+            </button>
+            <input type="file" id="importarArquivo" accept=".json" class="escondido" onchange="importarDados(event)">
+            <hr class="my-2" style="border-color: var(--borda);">
+            <button onclick="fazerLogout()" class="w-full text-left px-3 py-2 rounded-lg text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
+                <i class="ri-logout-box-line"></i> 🚪 Sair da Conta
+            </button>
+        </div>
+    </div>
+    
+    <!-- Conteúdo Principal -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        
+        <!-- Cards de Status -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <div class="cartao p-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="ri-time-line text-blue-500"></i>
+                    <span class="text-xs" style="color: var(--texto-claro);">Hoje</span>
+                </div>
+                <p class="text-xl font-bold" id="statHoje">0h 0m</p>
+            </div>
+            <div class="cartao p-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="ri-fire-line text-orange-500"></i>
+                    <span class="text-xs" style="color: var(--texto-claro);">Sequência</span>
+                </div>
+                <p class="text-xl font-bold"><span id="statStreak">0</span> dias</p>
+            </div>
+            <div class="cartao p-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="ri-file-list-3-line text-purple-500"></i>
+                    <span class="text-xs" style="color: var(--texto-claro);">Cartões</span>
+                </div>
+                <p class="text-xl font-bold" id="statCards">0</p>
+            </div>
+            <div class="cartao p-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="ri-star-line text-amber-500"></i>
+                    <span class="text-xs" style="color: var(--texto-claro);">XP</span>
+                </div>
+                <p class="text-xl font-bold text-amber-500" id="statXP">0</p>
+            </div>
+        </div>
+        
+        <!-- Navegação Desktop -->
+        <nav class="hidden md:flex gap-2 mb-6 p-2 rounded-xl" style="background: var(--borda);">
+            <button onclick="mostrarAba('dashboard')" class="aba tab-ativo flex-1 px-4 py-2 rounded-lg text-sm font-medium" data-aba="dashboard">
+                <i class="ri-dashboard-line mr-1"></i> Painel
+            </button>
+            <button onclick="mostrarAba('pomodoro')" class="aba flex-1 px-4 py-2 rounded-lg text-sm font-medium" data-aba="pomodoro" style="color: var(--texto-claro);">
+                <i class="ri-timer-line mr-1"></i> Pomodoro
+            </button>
+            <button onclick="mostrarAba('gerador')" class="aba flex-1 px-4 py-2 rounded-lg text-sm font-medium" data-aba="gerador" style="color: var(--roxo);">
+                <i class="ri-robot-line mr-1"></i> Gerador IA
+            </button>
+            <button onclick="mostrarAba('flashcards')" class="aba flex-1 px-4 py-2 rounded-lg text-sm font-medium" data-aba="flashcards" style="color: var(--texto-claro);">
+                <i class="ri-article-line mr-1"></i> Flashcards
+            </button>
+            <button onclick="mostrarAba('materias')" class="aba flex-1 px-4 py-2 rounded-lg text-sm font-medium" data-aba="materias" style="color: var(--texto-claro);">
+                <i class="ri-book-2-line mr-1"></i> Matérias
+            </button>
+            <button onclick="mostrarAba('chatia')" class="aba flex-1 px-4 py-2 rounded-lg text-sm font-medium" data-aba="chatia" style="color: #10b981;">
+                <i class="ri-robot-2-line mr-1"></i> Chat IA
+            </button>
+            <button onclick="mostrarAba('ranking')" class="aba flex-1 px-4 py-2 rounded-lg text-sm font-medium" data-aba="ranking" style="color: #f59e0b;">
+                <i class="ri-trophy-line mr-1"></i> Ranking
+            </button>
+        </nav>
+        
+        <!-- PAINEL -->
+        <div id="aba-dashboard" class="tab-content active">
+            <div class="rounded-2xl p-6 mb-6 text-white" style="background: linear-gradient(135deg, #1e3a8a, #7c3aed);">
+                <h3 class="font-bold text-lg mb-2">🎯 Meta de Hoje</h3>
+                <p class="text-blue-100 text-sm mb-4">Estude pelo menos 2 horas</p>
+                <div class="w-full h-3 bg-white/20 rounded-full overflow-hidden mb-2">
+                    <div id="metaBarra" class="h-full bg-white rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-blue-100"><span id="metaTexto">0%</span> concluído</p>
+            </div>
+            
+            <h3 class="font-bold text-lg mb-4">⚡ Ações Rápidas</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                <button onclick="mostrarAba('pomodoro')" class="cartao cartao-hover p-5 text-left">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-2xl" style="background: #fef2f2;">⏱️</div>
+                    <p class="font-semibold">Iniciar Pomodoro</p>
+                    <p class="text-xs mt-1" style="color: var(--texto-claro);">25 min de foco</p>
+                </button>
+                <button onclick="mostrarAba('gerador')" class="cartao cartao-hover p-5 text-left border-2" style="border-color: rgba(124,58,237,0.3);">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-2xl" style="background: #ede9fe;">🤖</div>
+                    <p class="font-semibold" style="color: var(--roxo);">Gerar Perguntas IA</p>
+                    <p class="text-xs mt-1" style="color: var(--texto-claro);">Não escreva nada!</p>
+                </button>
+                <button onclick="mostrarAba('flashcards')" class="cartao cartao-hover p-5 text-left">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-2xl" style="background: #eff6ff;">📇</div>
+                    <p class="font-semibold">Revisar Cartões</p>
+                    <p class="text-xs mt-1" style="color: var(--texto-claro);">Memorização ativa</p>
+                </button>
+                <button onclick="mostrarAba('materias')" class="cartao cartao-hover p-5 text-left">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-2xl" style="background: #ecfdf5;">📖</div>
+                    <p class="font-semibold">Explorar Matérias</p>
+                    <p class="text-xs mt-1" style="color: var(--texto-claro);">Inclui Espanhol 🇪🇸</p>
+                </button>
+                <button onclick="iniciarRapido()" class="cartao cartao-hover p-5 text-left">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-2xl" style="background: #fef3c7;">⚡</div>
+                    <p class="font-semibold">Sessão Rápida</p>
+                    <p class="text-xs mt-1" style="color: var(--texto-claro);">15 min de estudo</p>
+                </button>
+                <button onclick="mostrarDicas()" class="cartao cartao-hover p-5 text-left">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-2xl" style="background: #e0e7ff;">💡</div>
+                    <p class="font-semibold">Dicas de Estudo</p>
+                    <p class="text-xs mt-1" style="color: var(--texto-claro);">Técnicas comprovadas</p>
+                </button>
+            </div>
+            
+            <div class="cartao p-5">
+                <h3 class="font-bold mb-3">📱 Sincronizar entre Aparelhos</h3>
+                <p class="text-sm mb-4" style="color: var(--texto-claro);">
+                    Use o botão abaixo para gerar um arquivo de backup. Transfira para outro celular/computador e importe para continuar seus estudos de onde parou!
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="exportarDados()" class="btn-gradiente px-4 py-2 text-sm">
+                        <i class="ri-download-cloud-line mr-1"></i> 💾 Exportar Meus Dados
+                    </button>
+                    <button onclick="document.getElementById('importarArquivo2').click();" class="px-4 py-2 text-sm rounded-xl font-medium"
+                        style="background: var(--borda); color: var(--texto);">
+                        <i class="ri-upload-cloud-line mr-1"></i> 📥 Importar
+                    </button>
+                    <input type="file" id="importarArquivo2" accept=".json" class="escondido" onchange="importarDados(event)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- POMODORO -->
+        <div id="aba-pomodoro" class="tab-content">
+            <div class="max-w-md mx-auto">
+                <div class="cartao p-8 text-center">
+                    <span id="pomodoroStatus" class="inline-block px-4 py-2 rounded-full text-sm font-medium mb-6" 
+                        style="background: #fef2f2; color: #dc2626;">⏱️ Tempo de Estudo</span>
+                    
+                    <div class="text-7xl font-bold font-mono mb-8" id="timerDisplay" style="font-variant-numeric: tabular-nums;">25:00</div>
+                    
+                    <div class="flex justify-center gap-3 mb-6">
+                        <button onclick="alternarTimer()" id="timerBtn" class="btn-gradiente px-6 py-3 text-base">
+                            <i class="ri-play-fill mr-1"></i> Iniciar
+                        </button>
+                        <button onclick="resetarTimer()" class="px-6 py-3 rounded-xl font-medium"
+                            style="background: var(--borda); color: var(--texto);">
+                            <i class="ri-refresh-line mr-1"></i> Resetar
+                        </button>
+                    </div>
+                    
+                    <div class="flex justify-center gap-2 mb-2">
+                        <span id="dot1" class="w-3 h-3 rounded-full" style="background: #dc2626;"></span>
+                        <span id="dot2" class="w-3 h-3 rounded-full" style="background: var(--borda);"></span>
+                        <span id="dot3" class="w-3 h-3 rounded-full" style="background: var(--borda);"></span>
+                        <span id="dot4" class="w-3 h-3 rounded-full" style="background: var(--borda);"></span>
+                    </div>
+                    <p class="text-sm" style="color: var(--texto-claro);">Ciclo <span id="cicloAtual">1</span> de 4</p>
+                    
+                    <div class="mt-6 pt-6" style="border-top: 1px solid var(--borda);">
+                        <p class="text-sm mb-3" style="color: var(--texto-claro);">Escolha a duração:</p>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="configurarPomodoro(25,5,this)" class="py-2 px-3 text-sm rounded-lg font-medium preset-ativo" style="background: rgba(59,130,246,0.1); color: var(--azul);">25/5</button>
+                            <button onclick="configurarPomodoro(50,10,this)" class="py-2 px-3 text-sm rounded-lg font-medium" style="background: var(--borda); color: var(--texto-claro);">50/10</button>
+                            <button onclick="configurarPomodoro(15,3,this)" class="py-2 px-3 text-sm rounded-lg font-medium" style="background: var(--borda); color: var(--texto-claro);">15/3</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GERADOR IA -->
+        <div id="aba-gerador" class="tab-content">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold mb-2">🤖 Gerador de Perguntas Inteligente</h2>
+                <p style="color: var(--texto-claro);">Digite apenas o tema e eu crio perguntas + respostas automaticamente!</p>
+            </div>
+            
+            <div class="cartao p-6 mb-6">
+                <label class="block text-sm font-medium mb-2">📌 Tema ou Assunto</label>
+                <input id="temaInput" type="text" placeholder="Ex: Verbos em espanhol, Célula animal, Revolução Francesa..."
+                    class="w-full border rounded-xl px-4 py-3 mb-4 text-base outline-none focus:ring-2 focus:ring-purple-500"
+                    style="background: var(--cartao); border-color: var(--borda); color: var(--texto);">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">📚 Matéria</label>
+                        <select id="materiaGerador" class="w-full border rounded-xl px-4 py-3"
+                            style="background: var(--cartao); border-color: var(--borda); color: var(--texto);">
+                            <option>Português</option>
+                            <option>Matemática</option>
+                            <option>História</option>
+                            <option>Geografia</option>
+                            <option>Ciências / Biologia</option>
+                            <option>Espanhol</option>
+                            <option>Inglês</option>
+                            <option>Física</option>
+                            <option>Química</option>
+                            <option>Filosofia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">🔢 Quantidade</label>
+                        <select id="qtdPerguntas" class="w-full border rounded-xl px-4 py-3"
+                            style="background: var(--cartao); border-color: var(--borda); color: var(--texto);">
+                            <option value="3">3 perguntas</option>
+                            <option value="5" selected>5 perguntas</option>
+                            <option value="8">8 perguntas</option>
+                            <option value="10">10 perguntas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">📊 Dificuldade</label>
+                        <select id="dificuldadeGerador" class="w-full border rounded-xl px-4 py-3"
+                            style="background: var(--cartao); border-color: var(--borda); color: var(--texto);">
+                            <option value="facil">Fácil</option>
+                            <option value="medio" selected>Médio</option>
+                            <option value="dificil">Difícil</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button onclick="gerarPerguntas()" id="btnGerar" class="w-full btn-dourado py-4 text-lg">
+                    ✨ Gerar Perguntas Automaticamente
+                </button>
+            </div>
+            
+            <div id="resultadoGeracao" class="escondido">
+                <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+                    <h3 class="font-bold text-lg">✅ Perguntas Geradas!</h3>
+                    <button onclick="adicionarTodas()" class="btn-gradiente px-4 py-2 text-sm">
+                        ➕ Adicionar Todas aos Flashcards
+                    </button>
+                </div>
+                <div id="listaGerada" class="space-y-4"></div>
+            </div>
+        </div>
+        
+        <!-- FLASHCARDS -->
+        <div id="aba-flashcards" class="tab-content">
+            <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+                <h2 class="text-xl font-bold">📇 Meus Flashcards</h2>
+                <div class="flex gap-2">
+                    <button onclick="iniciarRevisao()" class="btn-gradiente px-4 py-2 text-sm">
+                        ▶️ Iniciar Revisão
+                    </button>
+                    <button onclick="abrirModalCartao()" class="px-4 py-2 text-sm rounded-xl font-medium"
+                        style="background: var(--borda); color: var(--texto);">
+                        <i class="ri-add-line mr-1"></i> Novo
+                    </button>
+                </div>
+            </div>
+            
+            <div id="listaCartoes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            <div id="semCartoes" class="text-center py-16" style="color: var(--texto-claro);">
+                <i class="ri-article-line text-5xl mb-3 opacity-30"></i>
+                <p class="font-medium">Nenhum cartão ainda</p>
+                <p class="text-sm mt-1">Use o Gerador IA ou crie manualmente!</p>
+            </div>
+        </div>
+        
+
+
+        <!-- CHAT IA (COM ACESSO À WEB) -->
+        <div id="aba-chatia" class="tab-content">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold mb-2">🤖 Chat IA — Pergunte Qualquer Coisa</h2>
+                <p style="color: var(--texto-claro);">IA real com acesso à internet 🌐. Pergunte sobre qualquer matéria, tema ou dúvida de estudo!</p>
+            </div>
+            
+            <!-- Aviso de configuração -->
+            <div id="avisoIA" class="cartao p-4 mb-4" style="border-left: 4px solid #f59e0b; display: none;">
+                <p class="text-sm font-medium mb-2">⚠️ Configure sua chave de API do Google Gemini (gratuita):</p>
+                <ol class="text-xs space-y-1" style="color: var(--texto-claro);">
+                    <li>1. Acesse: <strong>https://aistudio.google.com/app/apikey</strong></li>
+                    <li>2. Clique em "Create API key" → copie a chave</li>
+                    <li>3. Cole abaixo e clique em Salvar</li>
+                </ol>
+                <div class="flex gap-2 mt-3">
+                    <input type="password" id="apiKeyInput" placeholder="Cole sua chave API aqui..." 
+                        class="flex-1 border rounded-lg px-3 py-2 text-sm outline-none"
+                        style="background: var(--cartao); border-color: var(--borda); color: var(--texto);">
+                    <button onclick="salvarApiKey()" class="btn-gradiente px-4 py-2 text-sm">Salvar</button>
+                </div>
+            </div>
+            
+            <!-- Status da IA -->
+            <div class="flex items-center gap-2 mb-4">
+                <span id="statusIA" class="text-xs px-3 py-1 rounded-full font-medium" style="background: rgba(148,163,184,0.15); color: var(--texto-claro);">
+                    ⏳ Verificando...
+                </span>
+                <button onclick="mostrarAvisoIA()" class="text-xs px-3 py-1 rounded-full font-medium" style="background: rgba(59,130,246,0.1); color: var(--azul);">
+                    ⚙️ Configurar API
+                </button>
+            </div>
+            
+            <!-- Área do chat -->
+            <div class="cartao p-4 mb-4" style="height: 400px; overflow-y: auto;" id="chatArea">
+                <div class="text-center py-12" style="color: var(--texto-claro);">
+                    <i class="ri-robot-2-line text-5xl mb-3 opacity-30"></i>
+                    <p class="font-medium">Olá! Eu sou o assistente de estudos IA 👋</p>
+                    <p class="text-sm mt-1">Pergunte sobre qualquer matéria ou dúvida!</p>
+                </div>
+            </div>
+            
+            <!-- Sugestões rápidas -->
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button onclick="perguntaRapida('Explique a Segunda Revolução Industrial')" class="text-xs px-3 py-2 rounded-lg" style="background: var(--borda); color: var(--texto);">🏭 Revolução Industrial</button>
+                <button onclick="perguntaRapida('Como funciona a fotossíntese?')" class="text-xs px-3 py-2 rounded-lg" style="background: var(--borda); color: var(--texto);">🌱 Fotossíntese</button>
+                <button onclick="perguntaRapida('Resolva: 2x² + 5x - 3 = 0')" class="text-xs px-3 py-2 rounded-lg" style="background: var(--borda); color: var(--texto);">🔢 Equação</button>
+                <button onclick="perguntaRapida('Diferença entre ser e estar em espanhol')" class="text-xs px-3 py-2 rounded-lg" style="background: var(--borda); color: var(--texto);">🇪🇸 Espanhol</button>
+                <button onclick="perguntaRapida('Quais foram as causas da Primeira Guerra Mundial?')" class="text-xs px-3 py-2 rounded-lg" style="background: var(--borda); color: var(--texto);">⚔️ Guerra Mundial</button>
+            </div>
+            
+            <!-- Input de pergunta -->
+            <div class="flex gap-2">
+                <input type="text" id="perguntaInput" placeholder="Digite sua pergunta..." 
+                    class="flex-1 border rounded-xl px-4 py-3 text-base outline-none focus:ring-2 focus:ring-green-500"
+                    style="background: var(--cartao); border-color: var(--borda); color: var(--texto);"
+                    onkeypress="if(event.key==='Enter') enviarPergunta()">
+                <button onclick="enviarPergunta()" id="btnEnviarIA" class="btn-gradiente px-6 py-3">
+                    <i class="ri-send-plane-fill"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- RANKING -->
+        <div id="aba-ranking" class="tab-content">
+            
+            <!-- Nível e Progresso -->
+            <div class="rounded-2xl p-6 mb-6 text-white" style="background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);">
+                <div class="flex items-center justify-between mb-4 flex-wrap gap-4">
+                    <div>
+                        <p class="text-amber-100 text-sm mb-1">Seu Nível Atual</p>
+                        <h2 class="text-3xl font-bold" id="nivelAtualNome">🌱 Novato</h2>
+                        <p class="text-amber-100 mt-1" id="posicaoRanking">Posição: --</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-5xl font-bold" id="xpTotalRanking">0</p>
+                        <p class="text-amber-100 text-sm">XP Total</p>
+                    </div>
+                </div>
+                <div class="mb-2 flex justify-between text-sm">
+                    <span id="nivelAtualBarra">🌱 Novato</span>
+                    <span id="proximoNivelBarra">📗 Aprendiz</span>
+                </div>
+                <div class="w-full h-3 bg-white/20 rounded-full overflow-hidden mb-2">
+                    <div id="nivelBarra" class="h-full bg-white rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-amber-100" id="progressoNivelTexto">0% para o próximo nível</p>
+            </div>
+            
+            <!-- Sua Divisão Atual -->
+            <div class="cartao p-5 mb-6" style="border-left: 4px solid var(--dourado);">
+                <div class="flex items-center justify-between flex-wrap gap-3">
+                    <div class="flex items-center gap-3">
+                        <span class="text-4xl" id="iconeDivisaoAtual">🌱</span>
+                        <div>
+                            <p class="text-xs" style="color: var(--texto-claro);">Sua Divisão</p>
+                            <h3 class="font-bold text-xl" id="nomeDivisaoAtual">Novato</h3>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs" style="color: var(--texto-claro);">Posição na divisão</p>
+                        <p class="text-2xl font-bold" style="color: var(--dourado);" id="posicaoDivisao">#--</p>
+                        <p class="text-xs" style="color: var(--texto-claro);" id="totalDivisao">de -- estudantes</p>
+                    </div>
+                </div>
+                <div class="mt-3 pt-3" style="border-top: 1px solid var(--borda);">
+                    <p class="text-xs mb-2" style="color: var(--texto-claro);">📈 Próxima divisão:</p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm" id="divisaoAtualBarra">🌱 Novato</span>
+                        <div class="flex-1 h-2 rounded-full overflow-hidden" style="background: var(--borda);">
+                            <div id="barraProgressoDivisao" class="h-full rounded-full transition-all" style="width: 0%; background: linear-gradient(90deg, var(--azul), var(--roxo));"></div>
+                        </div>
+                        <span class="text-sm" id="proximaDivisaoBarra">📗 Aprendiz</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ranking por Divisão -->
+            <div class="cartao p-5 mb-6">
+                <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                    <h3 class="font-bold text-lg flex items-center gap-2">
+                        <i class="ri-trophy-line text-amber-500"></i> 🏆 Ranking por Divisão
+                    </h3>
+                    <span id="statusRanking" class="text-xs px-3 py-1 rounded-full font-medium" style="background: rgba(148,163,184,0.15); color: var(--texto-claro);">
+                        ⏳ Carregando...
+                    </span>
+                </div>
+                
+                <!-- Seletor de Divisão -->
+                <div class="flex gap-2 overflow-x-auto pb-2 mb-4" id="abasDivisao" style="scrollbar-width: thin;">
+                    <!-- Preenchido por JS -->
+                </div>
+                
+                <div id="listaRanking" class="space-y-2"></div>
+            </div>
+            
+            <!-- Desafios -->
+            <div class="cartao p-5 mb-6">
+                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                    <i class="ri-medal-line text-purple-500"></i> 🎯 Desafios Diários
+                </h3>
+                <div id="listaDesafios" class="space-y-3"></div>
+            </div>
+            
+            <!-- Níveis -->
+            <div class="cartao p-5">
+                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                    <i class="ri-star-line text-blue-500"></i> ⭐ Todos os Níveis
+                </h3>
+                <div id="listaNiveis" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+            </div>
+            
+        </div>
+
+        <!-- MATÉRIAS -->
+        <div id="aba-materias" class="tab-content">
+            <h2 class="text-xl font-bold mb-6">📖 Matérias — <span id="nomeNivel">Fundamental 1</span></h2>
+            <div id="listaMaterias" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+        
+    </main>
+    
+    <!-- Navegação Inferior Mobile -->
+    <nav class="nav-inferior">
+        <button onclick="mostrarAba('dashboard')" class="ativo" data-aba="dashboard">
+            <i class="ri-dashboard-line"></i>
+            <span>Painel</span>
+        </button>
+        <button onclick="mostrarAba('pomodoro')" data-aba="pomodoro">
+            <i class="ri-timer-line"></i>
+            <span>Pomodoro</span>
+        </button>
+        <button onclick="mostrarAba('gerador')" data-aba="gerador" style="color: var(--roxo);">
+            <i class="ri-robot-line"></i>
+            <span>IA</span>
+        </button>
+        <button onclick="mostrarAba('flashcards')" data-aba="flashcards">
+            <i class="ri-article-line"></i>
+            <span>Cartões</span>
+        </button>
+        <button onclick="mostrarAba('materias')" data-aba="materias">
+            <i class="ri-book-2-line"></i>
+            <span>Matérias</span>
+        </button>
+        <button onclick="mostrarAba('chatia')" data-aba="chatia" style="color: #10b981;">
+            <i class="ri-robot-2-line"></i>
+            <span>Chat IA</span>
+        </button>
+        <button onclick="mostrarAba('ranking')" data-aba="ranking" style="color: #f59e0b;">
+            <i class="ri-trophy-line"></i>
+            <span>Ranking</span>
+        </button>
+    </nav>
+    
+    <!-- Modal Novo Cartão -->
+    <div id="modalCartao" class="escondido fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="cartao p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">📇 Novo Flashcard</h3>
+                <button onclick="fecharModalCartao()" class="text-2xl" style="color: var(--texto-claro);">&times;</button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-medium block mb-1">Pergunta</label>
+                    <input id="perguntaInput" type="text" class="w-full border rounded-lg px-4 py-2"
+                        style="background: var(--cartao); border-color: var(--borda); color: var(--texto);">
+                </div>
+                <div>
+                    <label class="text-sm font-medium block mb-1">Resposta</label>
+                    <textarea id="respostaInput" rows="3" class="w-full border rounded-lg px-4 py-2"
+                        style="background: var(--cartao); border-color: var(--borda); color: var(--texto);"></textarea>
+                </div>
+                <div>
+                    <label class="text-sm font-medium block mb-1">Matéria</label>
+                    <select id="materiaCartao" class="w-full border rounded-lg px-4 py-2"
+                        style="background: var(--cartao); border-color: var(--borda); color: var(--texto);">
+                        <option>Português</option>
+                        <option>Matemática</option>
+                        <option>História</option>
+                        <option>Geografia</option>
+                        <option>Ciências / Biologia</option>
+                        <option>Espanhol</option>
+                        <option>Inglês</option>
+                        <option>Física</option>
+                        <option>Química</option>
+                    </select>
+                </div>
+                <button onclick="salvarCartao()" class="w-full btn-gradiente py-3">💾 Salvar Cartão</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Revisão -->
+    <div id="modalRevisao" class="escondido fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+        <div class="cartao p-6 w-full max-w-lg">
+            <div class="flex justify-between items-center mb-4">
+                <span id="contagemRevisao" class="text-sm font-medium" style="color: var(--texto-claro);">1 de 5</span>
+                <button onclick="fecharRevisao()" class="text-2xl" style="color: var(--texto-claro);">&times;</button>
+            </div>
+            
+            <div onclick="virarCartao()" class="flip-card cursor-pointer h-64 mb-6">
+                <div id="cartaoRevisao" class="flip-inner w-full h-full">
+                    <div class="flip-frente absolute w-full h-full flex items-center justify-center p-6 text-center rounded-xl"
+                        style="background: linear-gradient(135deg, #eff6ff, #dbeafe);">
+                        <p id="textoFrente" class="text-lg font-medium">Clique para começar</p>
+                    </div>
+                    <div class="flip-verso w-full h-full flex items-center justify-center p-6 text-center rounded-xl"
+                        style="background: linear-gradient(135deg, #ede9fe, #ddd6fe);">
+                        <p id="textoVerso" class="text-base"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-center text-sm mb-4" style="color: var(--texto-claro);">👆 Clique no cartão para ver a resposta</p>
+            
+            <div class="grid grid-cols-3 gap-3">
+                <button onclick="avaliar('dificil')" class="py-3 rounded-xl font-medium" style="background: #fef2f2; color: #dc2626;">😓 Difícil</button>
+                <button onclick="avaliar('medio')" class="py-3 rounded-xl font-medium" style="background: #fef3c7; color: #b45309;">🤔 Médio</button>
+                <button onclick="avaliar('facil')" class="py-3 rounded-xl font-medium" style="background: #dcfce7; color: #16a34a;">😊 Fácil</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Dicas -->
+    <div id="modalDicas" class="escondido fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="cartao p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">💡 Dicas de Estudo</h3>
+                <button onclick="fecharDicas()" class="text-2xl" style="color: var(--texto-claro);">&times;</button>
+            </div>
+            <div class="space-y-4 text-sm">
+                <div class="p-4 rounded-xl" style="background: #eff6ff;">
+                    <h4 class="font-bold text-blue-800 mb-1">⏱️ Técnica Pomodoro</h4>
+                    <p class="text-blue-700">25 min focado + 5 min descanso. Melhora concentração e evita fadiga.</p>
+                </div>
+                <div class="p-4 rounded-xl" style="background: #dcfce7;">
+                    <h4 class="font-bold text-green-800 mb-1">🧠 Active Recall</h4>
+                    <p class="text-green-700">Teste-se constantemente! É 3x mais eficaz que apenas ler.</p>
+                </div>
+                <div class="p-4 rounded-xl" style="background: #ede9fe;">
+                    <h4 class="font-bold text-purple-800 mb-1">📅 Revisão Espaçada</h4>
+                    <p class="text-purple-700">Revise em intervalos: 1, 3, 7, 15, 30 dias. Fixa na memória!</p>
+                </div>
+                <div class="p-4 rounded-xl" style="background: #fef3c7;">
+                    <h4 class="font-bold text-amber-800 mb-1">👨‍🏫 Técnica Feynman</h4>
+                    <p class="text-amber-700">Explique em palavras simples. Se não explicar, não entendeu.</p>
+                </div>
+                <div class="p-4 rounded-xl" style="background: #fef2f2;">
+                    <h4 class="font-bold text-red-800 mb-1">😴 Sono é Estudo</h4>
+                    <p class="text-red-700">Dormir bem fixa o conteúdo. O cérebro processa durante o sono.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast">Mensagem</div>
+
+<script>
+// ============================================================
+//          FIREBASE - CONFIGURAÇÃO (RANKING AO VIVO)
+// ============================================================
+// ⚠️ COLOQUE SUAS CREDENCIAIS DO FIREBASE AQUI!
+//    Acesse: https://console.firebase.google.com → Seu Projeto → ⚙️ Configurações do Projeto → Seus apps → Web
+//    Copie o "firebaseConfig" e cole abaixo substituindo os valores.
+//    Se deixar como está, o app funciona LOCALMENTE (sem ranking real).
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY_AQUI",
+  authDomain: "SEU_PROJETO.firebaseapp.com",
+  databaseURL: "https://SEU_PROJETO-default-rtdb.firebaseio.com",
+  projectId: "SEU_PROJETO",
+  storageBucket: "SEU_PROJETO.appspot.com",
+  messagingSenderId: "SEU_NUMERO_AQUI",
+  appId: "SEU_APP_ID_AQUI"
+};
+
+// Verifica se o Firebase foi configurado corretamente
+let firebaseAtivo = false;
+let auth = null;
+let db = null;
+let inscricaoRanking = null;
+
+try {
+    if (firebaseConfig.apiKey !== "SUA_API_KEY_AQUI" && typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.database();
+        // Testar conexão rapidamente
+        setTimeout(() => {
+            try {
+                db.ref('.info/connected').once('value', () => {
+                    firebaseAtivo = true;
+                    console.log('🔥 Firebase conectado! Ranking em tempo real ATIVADO.');
+                }).catch(() => {
+                    firebaseAtivo = false;
+                    console.log('⚠️ Firebase indisponível. Usando modo local.');
+                });
+            } catch(e) { firebaseAtivo = false; }
+        }, 2000);
+        firebaseAtivo = true; // Assume ativo até prova em contrário
+    } else {
+        firebaseAtivo = false;
+        console.log('⚠️ Firebase não configurado. Usando modo local (ranking simulado).');
+    }
+} catch(e) {
+    console.log('⚠️ Erro ao iniciar Firebase, usando modo local:', e.message);
+    firebaseAtivo = false;
+    auth = null;
+    db = null;
+}
+
+// ============================================================
+//                SISTEMA DE LOGIN E USUÁRIOS
+// ============================================================
+
+const CHAVE_USUARIOS = 'educatotal_usuarios';
+const CHAVE_USUARIO_ATUAL = 'educatotal_usuario_atual';
+
+let usuarioAtual = null;
+let estado = null;
+
+// Estrutura de dados padrão
+function dadosPadrao() {
+    return {
+        nivel: 'fundamental1',
+        temaEscuro: false,
+        pomodoro: {
+            tempoEstudo: 25 * 60, tempoDescanso: 5 * 60,
+            tempoRestante: 25 * 60, rodando: false,
+            modoEstudo: true, ciclo: 1, intervalo: null
+        },
+        cartoes: [],
+        estatisticas: {},
+        xp: 0,
+        streak: 0,
+        ultimoEstudo: '',
+        revisao: { lista: [], indice: 0, virado: false },
+        perguntasGeradas: [],
+        
+        niveisXP: [
+            {nome: 'Novato', min: 0, cor: '#94a3b8', icone: '🌱'},
+            {nome: 'Aprendiz', min: 100, cor: '#22c55e', icone: '📗'},
+            {nome: 'Estudante', min: 300, cor: '#3b82f6', icone: '📘'},
+            {nome: 'Estudante Dedicado', min: 700, cor: '#8b5cf6', icone: '📕'},
+            {nome: 'Mestre', min: 1500, cor: '#f59e0b', icone: '🎓'},
+            {nome: 'Especialista', min: 3000, cor: '#ec4899', icone: '⭐'},
+            {nome: 'Gênio', min: 6000, cor: '#ef4444', icone: '💎'},
+            {nome: 'Lenda', min: 10000, cor: '#14b8a6', icone: '👑'}
+        ],
+        rankingSimulado: [
+            {nome: 'Ana S.', xp: 2850, avatar: '👩‍🎓'},
+            {nome: 'Carlos M.', xp: 2100, avatar: '👨‍💻'},
+            {nome: 'Juliana R.', xp: 1780, avatar: '👩‍🔬'},
+            {nome: 'Pedro K.', xp: 1320, avatar: '👨‍🎨'},
+            {nome: 'Mariana L.', xp: 980, avatar: '👩‍⚕️'},
+            {nome: 'Lucas P.', xp: 650, avatar: '👨‍🏫'},
+            {nome: 'Fernanda G.', xp: 420, avatar: '👩‍🎨'}
+        ],
+        desafios: [
+            {id: 1, nome: 'Complete 1 sessão de revisão', xp: 20, feito: false, tipo: 'revisao', meta: 1, progresso: 0},
+            {id: 2, nome: 'Estude 30 minutos no Pomodoro', xp: 15, feito: false, tipo: 'pomodoro', meta: 30, progresso: 0},
+            {id: 3, nome: 'Gere 10 perguntas com IA', xp: 25, feito: false, tipo: 'ia', meta: 10, progresso: 0},
+            {id: 4, nome: 'Crie 5 flashcards', xp: 15, feito: false, tipo: 'cartoes', meta: 5, progresso: 0},
+            {id: 5, nome: 'Estude 5 dias seguidos', xp: 50, feito: false, tipo: 'streak', meta: 5, progresso: 0}
+        ],
+        areaSelecionada: null,
+        cartoesPorArea: {}
+    };
+
+}
+
+// Hash simples para senha (não é criptografia forte, mas suficiente para app local)
+function hashSenha(senha) {
+    let hash = 0;
+    for (let i = 0; i < senha.length; i++) {
+        const char = senha.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash.toString(36) + '_' + senha.length;
+}
+
+// Pegar todos os usuários cadastrados
+function getUsuarios() {
+    return JSON.parse(localStorage.getItem(CHAVE_USUARIOS) || '{}');
+}
+
+// Salvar usuários
+function salvarUsuarios(usuarios) {
+    localStorage.setItem(CHAVE_USUARIOS, JSON.stringify(usuarios));
+}
+
+// Alternar entre abas de login e cadastro
+function mostrarAbaLogin(tipo) {
+    const formLogin = document.getElementById('formLogin');
+    const formCadastro = document.getElementById('formCadastro');
+    const btnLogin = document.getElementById('abaLoginBtn');
+    const btnCadastro = document.getElementById('abaCadastroBtn');
+    
+    if (tipo === 'login') {
+        formLogin.classList.remove('escondido');
+        formCadastro.classList.add('escondido');
+        btnLogin.classList.add('ativa');
+        btnCadastro.classList.remove('ativa');
+    } else {
+        formLogin.classList.add('escondido');
+        formCadastro.classList.remove('escondido');
+        btnLogin.classList.remove('ativa');
+        btnCadastro.classList.add('ativa');
+    }
+}
+
+// Fazer login (Firebase se ativo, senão local)
+async function fazerLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const senha = document.getElementById('loginSenha').value;
+    
+    if (firebaseAtivo) {
+        // === LOGIN COM FIREBASE AUTH ===
+        try {
+            const cred = await auth.signInWithEmailAndPassword(email, senha);
+            const uid = cred.user.uid;
+            // Buscar dados do usuário no banco
+            const snap = await db.ref('usuarios/' + uid).once('value');
+            const dadosFB = snap.val() || {};
+            
+            // Carregar dados locais se existirem, senão usar padrão
+            const usuarios = getUsuarios();
+            const dadosLocais = usuarios[email] ? usuarios[email].dados : null;
+            
+            usuarioAtual = {
+                uid: uid,
+                email: email,
+                nome: dadosFB.nome || cred.user.displayName || email.split('@')[0],
+                dados: dadosLocais || dadosPadrao()
+            };
+            estado = usuarioAtual.dados;
+            // Sincronizar XP com o Firebase (usa o maior valor)
+            if (dadosFB.xp !== undefined && dadosFB.xp > estado.xp) {
+                estado.xp = dadosFB.xp;
+            }
+            
+            localStorage.setItem(CHAVE_USUARIO_ATUAL, email);
+            salvarDadosUsuario();
+            entrarNoApp();
+            // Garantir que o nome está no banco
+            db.ref('usuarios/' + uid).update({ nome: usuarioAtual.nome, email: email, ultimoAcesso: Date.now() });
+            mostrarToast('👋 Bem-vindo(a), ' + usuarioAtual.nome + '!', 'sucesso');
+        } catch(e) {
+            let msg = 'Erro ao entrar. Verifique e-mail e senha.';
+            if (e.code === 'auth/user-not-found') msg = 'E-mail não cadastrado no Firebase';
+            if (e.code === 'auth/wrong-password') msg = 'Senha incorreta';
+            if (e.code === 'auth/invalid-email') msg = 'E-mail inválido';
+            mostrarErroLogin('loginSenha', msg);
+        }
+        return;
+    }
+    
+    // === LOGIN LOCAL (fallback) ===
+    const usuarios = getUsuarios();
+    
+    if (!usuarios[email]) {
+        mostrarErroLogin('loginEmail', 'E-mail não cadastrado');
+        return;
+    }
+    
+    if (usuarios[email].senha !== hashSenha(senha)) {
+        mostrarErroLogin('loginSenha', 'Senha incorreta');
+        return;
+    }
+    
+    usuarioAtual = {
+        email: email,
+        nome: usuarios[email].nome,
+        dados: usuarios[email].dados
+    };
+    
+    localStorage.setItem(CHAVE_USUARIO_ATUAL, email);
+    estado = usuarioAtual.dados;
+    
+    entrarNoApp();
+    mostrarToast('👋 Bem-vindo(a), ' + usuarioAtual.nome + '!', 'sucesso');
+}
+
+// Fazer cadastro (Firebase se ativo, senão local)
+async function fazerCadastro(event) {
+    event.preventDefault();
+    
+    const nome = document.getElementById('cadastroNome').value.trim();
+    const email = document.getElementById('cadastroEmail').value.trim().toLowerCase();
+    const senha = document.getElementById('cadastroSenha').value;
+    const senha2 = document.getElementById('cadastroSenha2').value;
+    
+    if (senha !== senha2) {
+        mostrarErroLogin('cadastroSenha2', 'As senhas não coincidem');
+        return;
+    }
+    if (senha.length < 6) {
+        mostrarErroLogin('cadastroSenha', 'Senha precisa ter pelo menos 6 caracteres (Firebase)');
+        return;
+    }
+    
+    if (firebaseAtivo) {
+        // === CADASTRO COM FIREBASE AUTH ===
+        try {
+            const cred = await auth.createUserWithEmailAndPassword(email, senha);
+            const uid = cred.user.uid;
+            await cred.user.updateProfile({ displayName: nome });
+            
+            // Salvar no Realtime Database para o ranking
+            await db.ref('usuarios/' + uid).set({
+                nome: nome,
+                email: email,
+                xp: 0,
+                dataCriacao: Date.now(),
+                ultimoAcesso: Date.now()
+            });
+            
+            // Também salvar localmente (para dados do app como cartões, pomodoro, etc.)
+            const usuarios = getUsuarios();
+            usuarios[email] = {
+                nome: nome,
+                email: email,
+                senha: hashSenha(senha),
+                dataCriacao: new Date().toISOString(),
+                dados: dadosPadrao()
+            };
+            salvarUsuarios(usuarios);
+            
+            usuarioAtual = {
+                uid: uid,
+                email: email,
+                nome: nome,
+                dados: usuarios[email].dados
+            };
+            estado = usuarioAtual.dados;
+            
+            localStorage.setItem(CHAVE_USUARIO_ATUAL, email);
+            entrarNoApp();
+            mostrarToast('🎉 Conta criada! Bem-vindo(a), ' + nome + '!', 'sucesso');
+        } catch(e) {
+            let msg = 'Erro ao criar conta.';
+            if (e.code === 'auth/email-already-in-use') msg = 'Este e-mail já está cadastrado';
+            if (e.code === 'auth/weak-password') msg = 'Senha muito fraca (mínimo 6 caracteres)';
+            if (e.code === 'auth/invalid-email') msg = 'E-mail inválido';
+            mostrarErroLogin('cadastroEmail', msg);
+        }
+        return;
+    }
+    
+    // === CADASTRO LOCAL (fallback) ===
+    const usuarios = getUsuarios();
+    
+    if (usuarios[email]) {
+        mostrarErroLogin('cadastroEmail', 'Este e-mail já está cadastrado');
+        return;
+    }
+    
+    usuarios[email] = {
+        nome: nome,
+        email: email,
+        senha: hashSenha(senha),
+        dataCriacao: new Date().toISOString(),
+        dados: dadosPadrao()
+    };
+    
+    salvarUsuarios(usuarios);
+    
+    usuarioAtual = {
+        email: email,
+        nome: nome,
+        dados: usuarios[email].dados
+    };
+    
+    localStorage.setItem(CHAVE_USUARIO_ATUAL, email);
+    estado = usuarioAtual.dados;
+    
+    entrarNoApp();
+    mostrarToast('🎉 Conta criada! Bem-vindo(a), ' + nome + '!', 'sucesso');
+}
+
+// Mostrar erro no formulário de login
+function mostrarErroLogin(campoId, mensagem) {
+    const campo = document.getElementById(campoId);
+    campo.classList.add('input-erro');
+    mostrarToast('❌ ' + mensagem, 'erro');
+    setTimeout(() => campo.classList.remove('input-erro'), 1000);
+}
+
+// Verificar se já está logado ao carregar
+function verificarLogin() {
+    // SEMPRE mostra a tela de login primeiro (evita "reset" enquanto espera)
+    document.getElementById('telaLogin').classList.remove('escondido');
+    
+    if (firebaseAtivo && auth) {
+        // === VERIFICAÇÃO COM FIREBASE (assíncrona) ===
+        try {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    const email = (user.email || '').toLowerCase();
+                    const usuarios = getUsuarios();
+                    const dadosLocais = usuarios[email] ? usuarios[email].dados : null;
+                    
+                    usuarioAtual = {
+                        uid: user.uid,
+                        email: email,
+                        nome: user.displayName || (usuarios[email] ? usuarios[email].nome : email.split('@')[0]),
+                        dados: dadosLocais || dadosPadrao()
+                    };
+                    estado = usuarioAtual.dados;
+                    
+                    // Sincronizar XP do Firebase (usa o maior)
+                    try {
+                        db.ref('usuarios/' + user.uid + '/xp').once('value').then(snap => {
+                            const xpFB = snap.val();
+                            if (xpFB !== null && xpFB > estado.xp) {
+                                estado.xp = xpFB;
+                                salvarDadosUsuario();
+                            }
+                            entrarNoApp();
+                        }).catch(() => entrarNoApp());
+                    } catch(e) { entrarNoApp(); }
+                    
+                    localStorage.setItem(CHAVE_USUARIO_ATUAL, email);
+                }
+                // Se não houver usuário, a tela de login já está visível (não faz nada)
+            });
+        } catch(e) {
+            console.log('Erro no auth Firebase, usando local:', e);
+            verificarLoginLocal();
+        }
+        return;
+    }
+    
+    // === VERIFICAÇÃO LOCAL (fallback) ===
+    verificarLoginLocal();
+}
+
+function verificarLoginLocal() {
+    const emailSalvo = localStorage.getItem(CHAVE_USUARIO_ATUAL);
+    if (emailSalvo) {
+        const usuarios = getUsuarios();
+        if (usuarios[emailSalvo]) {
+            usuarioAtual = {
+                email: emailSalvo,
+                nome: usuarios[emailSalvo].nome,
+                dados: usuarios[emailSalvo].dados
+            };
+            estado = usuarioAtual.dados;
+            entrarNoApp();
+            return;
+        }
+    }
+    document.getElementById('telaLogin').classList.remove('escondido');
+}
+
+// Entrar no aplicativo
+function entrarNoApp() {
+    document.getElementById('telaLogin').classList.add('escondido');
+    document.getElementById('appPrincipal').classList.remove('escondido');
+    
+    // Atualizar informações do usuário
+    document.getElementById('nomeUsuario').textContent = usuarioAtual.nome;
+    document.getElementById('menuNome').textContent = usuarioAtual.nome;
+    document.getElementById('menuEmail').textContent = usuarioAtual.email;
+    
+    // Iniciais do usuário
+    const iniciais = usuarioAtual.nome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    document.getElementById('iniciaisUsuario').textContent = iniciais;
+    
+    // Inicializar app
+    inicializarApp();
+    
+    // 🔥 Iniciar ranking em TEMPO REAL (se Firebase ativo)
+    if (firebaseAtivo) {
+        iniciarRankingTempoReal();
+        // Atualizar XP no banco no login
+        sincronizarXPFirebase();
+        // Mostrar indicador de "ao vivo"
+        setTimeout(() => {
+            mostrarToast('⚡ Ranking em tempo real ativado!', 'sucesso');
+        }, 1500);
+    }
+}
+
+// Fazer logout
+function fazerLogout() {
+    if (!confirm('Tem certeza que deseja sair? Seus dados continuam salvos neste aparelho.')) return;
+    
+    // Parar pomodoro se estiver rodando
+    if (estado.pomodoro.intervalo) clearInterval(estado.pomodoro.intervalo);
+    
+    // Parar inscrição do ranking em tempo real
+    if (inscricaoRanking) {
+        try { db.ref('usuarios').off('value', inscricaoRanking); } catch(e) {}
+        inscricaoRanking = null;
+    }
+    
+    salvarDadosUsuario();
+    localStorage.removeItem(CHAVE_USUARIO_ATUAL);
+    
+    if (firebaseAtivo && auth) {
+        auth.signOut().catch(() => {});
+    }
+    
+    usuarioAtual = null;
+    estado = null;
+    
+    document.getElementById('appPrincipal').classList.add('escondido');
+    document.getElementById('telaLogin').classList.remove('escondido');
+    
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginSenha').value = '';
+    document.getElementById('cadastroNome').value = '';
+    document.getElementById('cadastroEmail').value = '';
+    document.getElementById('cadastroSenha').value = '';
+    document.getElementById('cadastroSenha2').value = '';
+    
+    mostrarToast('👋 Você saiu da conta', 'sucesso');
+}
+
+// Salvar dados do usuário atual
+function salvarDadosUsuario() {
+    if (!usuarioAtual) return;
+    
+    const usuarios = getUsuarios();
+    if (usuarios[usuarioAtual.email]) {
+        usuarios[usuarioAtual.email].dados = estado;
+        usuarios[usuarioAtual.email].nome = usuarioAtual.nome;
+        salvarUsuarios(usuarios);
+    }
+}
+
+// ============================================================
+//               EXPORTAÇÃO / IMPORTAÇÃO (SINCRONIA)
+// ============================================================
+
+function exportarDados() {
+    if (!usuarioAtual) return;
+    
+    const backup = {
+        aplicativo: 'EducaUltra.V5.0',
+        versao: '3.0',
+        dataExportacao: new Date().toISOString(),
+        usuario: {
+            nome: usuarioAtual.nome,
+            email: usuarioAtual.email
+        },
+        dados: estado
+    };
+    
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `EducaUltra.V5.0-Backup-${usuarioAtual.nome.replace(/\s/g, '_')}-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    mostrarToast('💾 Backup exportado! Transfira este arquivo para outro aparelho.', 'sucesso');
+}
+
+function importarDados(event) {
+    const arquivo = event.target.files[0];
+    if (!arquivo) return;
+    
+    const leitor = new FileReader();
+    leitor.onload = function(e) {
+        try {
+            const backup = JSON.parse(e.target.result);
+            
+            if (!backup.dados || !backup.usuario) {
+                throw new Error('Arquivo inválido');
+            }
+            
+            if (confirm(`Deseja importar os dados de "${backup.usuario.nome}"?\n\n⚠️ ATENÇÃO: Isso substituirá TODOS os seus dados atuais!`)) {
+                
+                // Atualizar estado
+                estado = backup.dados;
+                
+                // Garantir que campos essenciais existam
+                if (!estado.cartoes) estado.cartoes = [];
+                if (!estado.estatisticas) estado.estatisticas = {};
+                if (!estado.xp) estado.xp = 0;
+                
+                // Atualizar nome se for o mesmo email
+                if (backup.usuario.email === usuarioAtual.email) {
+                    usuarioAtual.nome = backup.usuario.nome;
+                    document.getElementById('nomeUsuario').textContent = backup.usuario.nome;
+                    document.getElementById('menuNome').textContent = backup.usuario.nome;
+                    const iniciais = backup.usuario.nome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                    document.getElementById('iniciaisUsuario').textContent = iniciais;
+                }
+                
+                salvarDadosUsuario();
+                inicializarApp();
+                
+                mostrarToast('✅ Dados importados com sucesso!', 'sucesso');
+            }
+        } catch (err) {
+            mostrarToast('❌ Arquivo inválido ou corrompido', 'erro');
+        }
+    };
+    leitor.readAsText(arquivo);
+    event.target.value = '';
+}
+
+// ============================================================
+//               MATÉRIAS E BASE DE DADOS
+// ============================================================
+
+const baseMaterias = {
+    fundamental1: {
+        titulo: 'Fundamental 1',
+        lista: [
+            {nome: 'Matemática', icone: '🔢', topicos: ['Números', 'Adição', 'Subtração', 'Multiplicação', 'Frações']},
+            {nome: 'Português', icone: '📝', topicos: ['Leitura', 'Escrita', 'Gramática', 'Ortografia']},
+            {nome: 'Ciências', icone: '🔬', topicos: ['Seres Vivos', 'Corpo Humano', 'Plantas', 'Animais']},
+            {nome: 'História', icone: '📜', topicos: ['Família', 'Comunidade', 'Datas Comemorativas']},
+            {nome: 'Geografia', icone: '🌍', topicos: ['Bairro', 'Cidade', 'Brasil', 'Mapas']},
+            {nome: 'Espanhol', icone: '🇪🇸', topicos: ['Saludos', 'Números 1-20', 'Colores', 'Familia', 'Presentación']},
+            {nome: 'Inglês', icone: '🇬🇧', topicos: ['Greetings', 'Numbers', 'Colors', 'Family']},
+            {nome: 'Francês', icone: '🇫🇷', topicos: ['Bonjour', 'Nombres', 'Couleurs', 'Famille']},
+            {nome: 'Libras', icone: '🤟', topicos: ['Alfabeto', 'Saudação', 'Números']},
+            {nome: 'Artes', icone: '🎨', topicos: ['Desenho', 'Pintura', 'Música', 'Teatro']}
+        ]
+    },
+    fundamental2: {
+        titulo: 'Fundamental 2',
+        lista: [
+            {nome: 'Matemática', icone: '🔢', topicos: ['Frações', 'Decimais', 'Equações', 'Geometria', '%']},
+            {nome: 'Português', icone: '📝', topicos: ['Gramática', 'Redação', 'Literatura', 'Interpretação']},
+            {nome: 'História', icone: '📜', topicos: ['Brasil Colônia', 'Império', 'República', 'Idade Média']},
+            {nome: 'Geografia', icone: '🌍', topicos: ['Brasil', 'América', 'Europa', 'África', 'Ásia']},
+            {nome: 'Ciências', icone: '🔬', topicos: ['Corpo Humano', 'Ecologia', 'Matéria', 'Energia']},
+            {nome: 'Espanhol', icone: '🇪🇸', topicos: ['Ser/Estar', 'Presente', 'Comidas', 'Rotina', 'Países']},
+            {nome: 'Inglês', icone: '🇬🇧', topicos: ['Verbos To Be', 'Presente', 'Família', 'Rotina']},
+            {nome: 'Francês', icone: '🇫🇷', topicos: ['Verbes', 'Présent', 'Famille', 'Routine']},
+            {nome: 'Libras', icone: '🤟', topicos: ['Sinais', 'Vocabulário', 'Histórias']},
+            {nome: 'Ed. Física', icone: '⚽', topicos: ['Esportes', 'Saúde', 'Jogos', 'Corpo']}
+        ]
+    },
+    medio: {
+        titulo: 'Ensino Médio',
+        lista: [
+            {nome: 'Matemática', icone: '🔢', topicos: ['Funções', 'Geometria', 'Trigonometria', 'Estatística']},
+            {nome: 'Português', icone: '📝', topicos: ['Literatura', 'Gramática', 'Redação', 'Interpretação']},
+            {nome: 'História', icone: '📜', topicos: ['Brasil República', 'Revoluções', 'Guerras Mundiais']},
+            {nome: 'Geografia', icone: '🌍', topicos: ['Geopolítica', 'Economia', 'Urbanização', 'Biomas']},
+            {nome: 'Física', icone: '⚛️', topicos: ['Mecânica', 'Termodinâmica', 'Ondas', 'Eletricidade']},
+            {nome: 'Química', icone: '🧪', topicos: ['Tabela Periódica', 'Ligações', 'Reações', 'Estequiometria']},
+            {nome: 'Biologia', icone: '🧬', topicos: ['Citologia', 'Genética', 'Ecologia', 'Fisiologia']},
+            {nome: 'Espanhol', icone: '🇪🇸', topicos: ['Gramática', 'Verbos', 'Literatura', 'Cultura Hispânica']},
+            {nome: 'Inglês', icone: '🇬🇧', topicos: ['Gramática', 'Leitura', 'Interpretação', 'Redação']},
+            {nome: 'Francês', icone: '🇫🇷', topicos: ['Grammaire', 'Lecture', 'Rédaction']},
+            {nome: 'Alemão', icone: '🇩🇪', topicos: ['Grammatik', 'Lesen', 'Sprechen']},
+            {nome: 'Libras', icone: '🤟', topicos: ['Avançado', 'Literatura Surda', 'Interpretação']},
+            {nome: 'Filosofia', icone: '💭', topicos: ['Antiga', 'Moderna', 'Ética', 'Política']},
+            {nome: 'Sociologia', icone: '👥', topicos: ['Sociedade', 'Cultura', 'Poder', 'Desigualdade']}
+        ]
+    },
+    enem: {
+        titulo: 'ENEM / Vestibular',
+        lista: [
+            {nome: 'Matemática', icone: '🔢', topicos: ['Funções', 'Geometria', 'Probabilidade', 'Gráficos']},
+            {nome: 'Português', icone: '📝', topicos: ['Interpretação', 'Gramática', 'Literatura', 'Redação']},
+            {nome: 'Linguagens', icone: '🗣️', topicos: ['Artes', 'Literatura', 'Tecnologia']},
+            {nome: 'Ciências Humanas', icone: '🏛️', topicos: ['História', 'Geografia', 'Filosofia', 'Sociologia']},
+            {nome: 'Ciências da Natureza', icone: '🔬', topicos: ['Física', 'Química', 'Biologia']},
+            {nome: 'Espanhol', icone: '🇪🇸', topicos: ['Comprensión', 'Gramática', 'Vocabulario', 'Cultura']},
+            {nome: 'Inglês', icone: '🇬🇧', topicos: ['Reading', 'Grammar', 'Vocabulary']},
+            {nome: 'Francês', icone: '🇫🇷', topicos: ['Compréhension', 'Grammaire', 'Vocabulaire']},
+            {nome: 'Libras', icone: '🤟', topicos: ['Língua', 'Cultura', 'Inclusão']},
+            {nome: 'Redação', icone: '✍️', topicos: ['Dissertação', 'Argumentação', 'Temas Atuais']}
+        ]
+    },
+    faculdade: {
+        titulo: 'Faculdade',
+        lista: [
+            {nome: 'Cálculo', icone: '📐', topicos: ['Limites', 'Derivadas', 'Integrais', 'Séries']},
+            {nome: 'Programação', icone: '💻', topicos: ['Algoritmos', 'Python', 'Estruturas de Dados']},
+            {nome: 'Engenharia', icone: '🏗️', topicos: ['Civil', 'Elétrica', 'Mecânica', 'Produção']},
+            {nome: 'Arquitetura', icone: '🏛️', topicos: ['Desenho', 'Urbanismo', 'Paisagismo']},
+            {nome: 'Física', icone: '⚛️', topicos: ['Mecânica', 'Eletromagnetismo', 'Ondas']},
+            {nome: 'Química', icone: '🧪', topicos: ['Geral', 'Orgânica', 'Físico-Química']},
+            {nome: 'Biologia', icone: '🧬', topicos: ['Celular', 'Molecular', 'Genética']},
+            {nome: 'Biotecnologia', icone: '🧫', topicos: ['Genética', 'Microbiologia', 'Bioinformática']},
+            {nome: 'Medicina', icone: '🩺', topicos: ['Anatomia', 'Fisiologia', 'Farmacologia']},
+            {nome: 'Enfermagem', icone: '👩‍⚕️', topicos: ['Clínica', 'Cirúrgica', 'Saúde Pública']},
+            {nome: 'Odontologia', icone: '🦷', topicos: ['Anatomia Dental', 'Prótese', 'Ortodontia']},
+            {nome: 'Farmácia', icone: '💊', topicos: ['Farmacologia', 'Cosmética', 'Análises']},
+            {nome: 'Fisioterapia', icone: '🦴', topicos: ['Traumato', 'Neurológica', 'Respiratória']},
+            {nome: 'Nutrição', icone: '🥗', topicos: ['Clínica', 'Esportiva', 'Saúde Pública']},
+            {nome: 'Veterinária', icone: '🐾', topicos: ['Anatomia Animal', 'Cirurgia', 'Preventiva']},
+            {nome: 'Psicologia', icone: '🧠', topicos: ['Desenvolvimento', 'Clínica', 'Social']},
+            {nome: 'Pedagogia', icone: '👩‍🏫', topicos: ['Educação Infantil', 'Fundamental', 'EJA']},
+            {nome: 'Direito', icone: '⚖️', topicos: ['Constitucional', 'Civil', 'Penal', 'Trabalho']},
+            {nome: 'Economia', icone: '📊', topicos: ['Micro', 'Macro', 'Econometria']},
+            {nome: 'Administração', icone: '💼', topicos: ['Gestão', 'Marketing', 'Finanças']},
+            {nome: 'Ciências Contábeis', icone: '🧮', topicos: ['Contábil', 'Fiscal', 'Auditoria']},
+            {nome: 'Marketing', icone: '📣', topicos: ['Digital', 'Branding', 'Vendas']},
+            {nome: 'RH / Recursos Humanos', icone: '👥', topicos: ['Recrutamento', 'Treinamento', 'Clima']},
+            {nome: 'Logística', icone: '🚚', topicos: ['Cadeia de Suprimentos', 'Estoques', 'Transporte']},
+            {nome: 'Jornalismo', icone: '📰', topicos: ['Reportagem', 'Editoração', 'Mídias Digitais']},
+            {nome: 'Publicidade', icone: '📺', topicos: ['Criação', 'Mídia', 'Planejamento']},
+            {nome: 'Relações Internacionais', icone: '🌍', topicos: ['Diplomacia', 'Comércio Exterior', 'Geopolítica']},
+            {nome: 'Design', icone: '🎨', topicos: ['Gráfico', 'Produto', 'UX/UI', 'Interiores']},
+            {nome: 'Gastronomia', icone: '👨‍🍳', topicos: ['Cozinha', 'Confeitaria', 'Gestão']},
+            {nome: 'Turismo', icone: '✈️', topicos: ['Hotelaria', 'Agências', 'Eventos']},
+            {nome: 'Educação Física', icone: '🏋️', topicos: ['Esportes', 'Saúde', 'Personal']},
+            {nome: 'Música', icone: '🎵', topicos: ['Teoria', 'Instrumentos', 'Composição']},
+            {nome: 'Astronomia', icone: '🔭', topicos: ['Astrofísica', 'Cosmologia', 'Planetologia']},
+            {nome: 'Ciências Sociais', icone: '🏺', topicos: ['Sociologia', 'Antropologia', 'Ciência Política']},
+            {nome: 'Serviço Social', icone: '🤝', topicos: ['Políticas Públicas', 'Assistência', 'Projetos']},
+            {nome: 'Segurança da Informação', icone: '🔒', topicos: ['Redes', 'Criptografia', 'Pentest']},
+            {nome: 'Agronomia', icone: '🌾', topicos: ['Solo', 'Plantas', 'Máquinas Agrícolas']},
+            {nome: 'Espanhol', icone: '🇪🇸', topicos: ['Avanzado', 'Conversación', 'Negocios', 'Académico']},
+            {nome: 'Inglês', icone: '🇬🇧', topicos: ['Advanced', 'Academic', 'Business']},
+            {nome: 'Francês', icone: '🇫🇷', topicos: ['Grammaire', 'Conversation', 'Culture']},
+            {nome: 'Alemão', icone: '🇩🇪', topicos: ['Grammatik', 'Sprechen', 'Kultur']},
+            {nome: 'Italiano', icone: '🇮🇹', topicos: ['Grammatica', 'Conversazione', 'Cultura']},
+            {nome: 'Japonês', icone: '🇯🇵', topicos: ['Hiragana', 'Kanji', 'Conversação']},
+            {nome: 'Coreano', icone: '🇰🇷', topicos: ['Hangul', 'Gramática', 'Cultura K-Pop']},
+            {nome: 'Mandarim', icone: '🇨🇳', topicos: ['Pinyin', 'Caracteres', 'Conversação']},
+            {nome: 'Libras', icone: '🤟', topicos: ['Sinais Básicos', 'Gramática', 'Cultura Surda']},
+            {nome: 'Metodologia', icone: '📚', topicos: ['Pesquisa', 'Artigos', 'TCC']}
+        ]
+    }
+};
+
+
+// ============================================================
+//               SISTEMA DE NÍVEIS E RANKING
+// ============================================================
+
+function getNivelAtual(xp) {
+    const niveis = estado.niveisXP || dadosPadrao().niveisXP;
+    let nivelAtual = niveis[0];
+    for (let i = 0; i < niveis.length; i++) {
+        if (xp >= niveis[i].min) nivelAtual = niveis[i];
+    }
+    return nivelAtual;
+}
+
+function getProximoNivel(xp) {
+    const niveis = estado.niveisXP || dadosPadrao().niveisXP;
+    for (let i = 0; i < niveis.length; i++) {
+        if (xp < niveis[i].min) return niveis[i];
+    }
+    return null;
+}
+
+function getProgressoNivel(xp) {
+    const atual = getNivelAtual(xp);
+    const proximo = getProximoNivel(xp);
+    if (!proximo) return 100;
+    const base = atual.min;
+    const meta = proximo.min - base;
+    const progresso = xp - base;
+    return Math.min(100, Math.floor((progresso / meta) * 100));
+}
+
+// Cache do ranking em tempo real (preenchido pelo listener do Firebase)
+let rankingTempoReal = [];
+
+function getRankingCompleto() {
+    if (!usuarioAtual) return [];
+    
+    // Se Firebase ativo e temos dados reais, usar eles (apenas usuários reais!)
+    if (firebaseAtivo && rankingTempoReal.length > 0) {
+        return rankingTempoReal;
+    }
+    
+    // Sem bots! Apenas o usuário real atual.
+    // Se não houver outros usuários reais ainda, a lista terá só você.
+    const ranking = [{
+        nome: usuarioAtual.nome + ' (Você)',
+        xp: estado.xp,
+        avatar: '🎯',
+        eu: true
+    }];
+    return ranking;
+}
+
+// Inicia a escuta em tempo real do ranking (chamado no entrarNoApp)
+function iniciarRankingTempoReal() {
+    if (!firebaseAtivo || !db || !usuarioAtual || !usuarioAtual.uid) return;
+    
+    // Escuta TODOS os usuários ordenados por XP (top 20)
+    const ref = db.ref('usuarios').orderByChild('xp').limitToLast(20);
+    
+    inscricaoRanking = ref.on('value', snap => {
+        const lista = [];
+        snap.forEach(child => {
+            const u = child.val();
+            if (!u || !u.nome) return;
+            lista.push({
+                id: child.key,
+                nome: u.nome,
+                xp: u.xp || 0,
+                avatar: '👤',
+                eu: child.key === usuarioAtual.uid,
+                nomeExibicao: child.key === usuarioAtual.uid ? u.nome + ' (Você)' : u.nome
+            });
+        });
+        // Ordenar por XP decrescente
+        lista.sort((a, b) => b.xp - a.xp);
+        // Ajustar nome exibição
+        lista.forEach(u => { u.nome = u.eu ? u.nome + ' (Você)' : u.nome; });
+        rankingTempoReal = lista;
+        
+        // Se a aba de ranking estiver aberta, atualizar na hora
+        const abaRanking = document.getElementById('aba-ranking');
+        if (abaRanking && abaRanking.classList.contains('active')) {
+            renderizarRanking();
+        }
+        // Atualizar stats também
+        atualizarStats();
+    });
+}
+
+// Sincronizar XP com o Firebase (usar transaction para concorrência)
+function sincronizarXPFirebase() {
+    if (!firebaseAtivo || !db || !usuarioAtual || !usuarioAtual.uid) return;
+    const ref = db.ref('usuarios/' + usuarioAtual.uid);
+    ref.transaction(dados => {
+        if (dados) {
+            // Garante que o XP nunca diminui (usa o maior valor)
+            dados.xp = Math.max(dados.xp || 0, estado.xp);
+            dados.nome = usuarioAtual.nome;
+            dados.divisao = getNomeDivisao(dados.xp); // 🏆 Salvar divisão no banco
+            dados.ultimoAcesso = Date.now();
+        }
+        return dados;
+    }).catch(e => console.log('Erro ao sincronizar XP:', e));
+}
+
+function getPosicaoUsuario() {
+    const ranking = getRankingCompleto();
+    return ranking.findIndex(r => r.eu) + 1;
+}
+
+function atualizarDesafios(tipo, valor = 1) {
+    if (!estado.desafios) estado.desafios = dadosPadrao().desafios;
+    
+    estado.desafios.forEach(d => {
+        if (d.feito) return;
+        if (d.tipo === tipo) {
+            d.progresso = Math.min(d.meta, d.progresso + valor);
+            if (d.progresso >= d.meta && !d.feito) {
+                d.feito = true;
+                adicionarXP(d.xp);
+                mostrarToast('🏆 Desafio concluído! +' + d.xp + ' XP: ' + d.nome, 'sucesso');
+            }
+        }
+    });
+    
+    // Atualizar streak
+    if (estado.desafios) {
+        const dStreak = estado.desafios.find(d => d.tipo === 'streak');
+        if (dStreak && !dStreak.feito) {
+            dStreak.progresso = estado.streak;
+            if (dStreak.progresso >= dStreak.meta) {
+                dStreak.feito = true;
+                adicionarXP(dStreak.xp);
+                mostrarToast('🏆 Desafio concluído! +' + dStreak.xp + ' XP!', 'sucesso');
+            }
+        }
+    }
+    
+    salvarDadosUsuario();
+    // Atualizar ranking se estiver visível
+    const abaRanking = document.getElementById('aba-ranking');
+    if (abaRanking && abaRanking.classList.contains('active')) {
+        renderizarRanking();
+    }
+    // Atualizar stats no painel
+    atualizarStats();
+}
+
+// ============================================================
+//               SISTEMA DE ÁREAS POR MATÉRIA
+// ============================================================
+
+const areasPorMateria = {
+    'Matemática': ['Aritmética', 'Álgebra', 'Geometria', 'Trigonometria', 'Estatística', 'Probabilidade', 'Cálculo Básico', 'Funções'],
+    'Português': ['Gramática', 'Ortografia', 'Pontuação', 'Interpretação de Texto', 'Literatura', 'Redação', 'Figuras de Linguagem', 'Análise Sintática'],
+    'História': ['Brasil Colônia', 'Brasil Império', 'Brasil República', 'Idade Média', 'Idade Moderna', 'Revoluções', 'Guerras Mundiais', 'História Geral'],
+    'Geografia': ['Cartografia', 'Climatologia', 'Geologia', 'Hidrografia', 'Geopolítica', 'Economia', 'Urbanização', 'Biomas'],
+    'Ciências / Biologia': ['Citologia', 'Genética', 'Ecologia', 'Fisiologia Humana', 'Botânica', 'Zoologia', 'Evolução', 'Microbiologia'],
+    'Espanhol': ['Vocabulário', 'Gramática Básica', 'Verbos', 'Conversação', 'Leitura', 'Cultura Hispânica', 'Redação', 'Pronomes'],
+    'Inglês': ['Vocabulary', 'Grammar', 'Verb Tenses', 'Reading', 'Writing', 'Speaking', 'Phrasal Verbs', 'Idioms'],
+    'Física': ['Mecânica', 'Termodinâmica', 'Ondas', 'Eletricidade', 'Magnetismo', 'Óptica', 'Física Moderna', 'Cinemática'],
+    'Química': ['Química Geral', 'Tabela Periódica', 'Ligações Químicas', 'Reações', 'Estequiometria', 'Química Orgânica', 'Soluções', 'Eletroquímica'],
+    'Filosofia': ['Filosofia Antiga', 'Filosofia Medieval', 'Filosofia Moderna', 'Filosofia Contemporânea', 'Ética', 'Política', 'Estética', 'Lógica'],
+    'Sociologia': ['Cultura', 'Sociedade', 'Poder', 'Desigualdade', 'Cidadania', 'Movimentos Sociais', 'Globalização', 'Trabalho'],
+    'Artes': ['Desenho', 'Pintura', 'Música', 'Teatro', 'Dança', 'História da Arte', 'Artesanato', 'Fotografia'],
+    'Ed. Física': ['Esportes Coletivos', 'Esportes Individuais', 'Ginástica', 'Lutas', 'Atletismo', 'Saúde e Qualidade de Vida', 'Jogos', 'Lazer'],
+    'Linguagens': ['Português', 'Literatura', 'Artes', 'Inglês', 'Espanhol', 'Tecnologia', 'Comunicação', 'Multimídia'],
+    'Ciências Humanas': ['História', 'Geografia', 'Filosofia', 'Sociologia', 'Antropologia', 'Ciência Política', 'Economia', 'Psicologia Social'],
+    'Ciências da Natureza': ['Física', 'Química', 'Biologia', 'Saúde', 'Meio Ambiente', 'Tecnologia', 'Pesquisa', 'Inovação'],
+    'Redação': ['Dissertação Argumentativa', 'Narrativa', 'Descrição', 'Exposição', 'Argumentação', 'Coesão', 'Coerência', 'Intertextualidade'],
+    'Cálculo': ['Limites', 'Derivadas', 'Integrais', 'Séries', 'Funções', 'Vetores', 'Geometria Analítica', 'EDO'],
+    'Programação': ['Algoritmos', 'Python', 'Java', 'JavaScript', 'Estruturas de Dados', 'POO', 'Banco de Dados', 'Web'],
+    'Economia': ['Microeconomia', 'Macroeconomia', 'Econometria', 'Economia Internacional', 'Finanças', 'Mercados', 'Desenvolvimento', 'Política Econômica'],
+    'Administração': ['Gestão de Pessoas', 'Marketing', 'Finanças', 'Planejamento', 'Logística', 'Empreendedorismo', 'Estratégia', 'RH'],
+    'Direito': ['Direito Constitucional', 'Direito Civil', 'Direito Penal', 'Direito do Trabalho', 'Direito Empresarial', 'Direito Tributário', 'Direito Internacional', 'Processual'],
+    'Medicina': ['Anatomia', 'Fisiologia', 'Farmacologia', 'Patologia', 'Clínica Médica', 'Cirurgia', 'Pediatria', 'Ginecologia'],
+    'Psicologia': ['Psicologia do Desenvolvimento', 'Psicologia Clínica', 'Psicologia Social', 'Psicologia Cognitiva', 'Psicanálise', 'Behaviorismo', 'Neuropsicologia', 'Psicopatologia'],
+    'Metodologia': ['Metodologia da Pesquisa', 'TCC', 'Artigos Científicos', 'Estatística Aplicada', 'Coleta de Dados', 'Análise de Dados', 'Referências', 'Apresentação'],
+    'Engenharia': ['Cálculo Aplicado', 'Resistência dos Materiais', 'Estruturas', 'Elétrica', 'Mecânica dos Fluidos', 'Termodinâmica', 'Projetos', 'Gestão de Obras'],
+    'Arquitetura': ['Desenho Arquitetônico', 'Urbanismo', 'Paisagismo', 'Conforto Ambiental', 'Estruturas', 'História da Arquitetura', 'Maquetes', 'Legislação'],
+    'Biotecnologia': ['Genética Molecular', 'Microbiologia', 'Bioinformática', 'Imunologia', 'Engenharia Genética', 'Bioprocessos', 'Biotecnologia Vegetal', 'Biotecnologia Animal'],
+    'Enfermagem': ['Enfermagem Clínica', 'Enfermagem Cirúrgica', 'Saúde Pública', 'Enfermagem Obstétrica', 'Pediatria', 'Psiquiatria', 'UTI', 'Epidemiologia'],
+    'Odontologia': ['Anatomia Dental', 'Prótese', 'Ortodontia', 'Endodontia', 'Periodontia', 'Cirurgia', 'Pediatria', 'Radiologia'],
+    'Farmácia': ['Farmacologia', 'Cosmetologia', 'Análises Clínicas', 'Farmacotécnica', 'Química Farmacêutica', 'Toxicologia', 'Farmácia Hospitalar', 'Indústria Farmacêutica'],
+    'Fisioterapia': ['Traumato-Ortopédica', 'Neurológica', 'Respiratória', 'Cardiológica', 'Pediátrica', 'Gerontológica', 'Estética', 'Uroginecológica'],
+    'Nutrição': ['Nutrição Clínica', 'Esportiva', 'Saúde Pública', 'Alimentação Coletiva', 'Patologia', 'Bioquímica', 'Fitoterapia', 'Emagrecimento'],
+    'Veterinária': ['Anatomia Animal', 'Cirurgia Veterinária', 'Medicina Preventiva', 'Clínica de Pequenos Animais', 'Grandes Animais', 'Animais Silvestres', 'Reprodução', 'Patologia'],
+    'Pedagogia': ['Educação Infantil', 'Ensino Fundamental', 'EJA', 'Educação Especial', 'Psicopedagogia', 'Gestão Escolar', 'Didática', 'Avaliação'],
+    'Ciências Contábeis': ['Contabilidade Geral', 'Contabilidade Fiscal', 'Auditoria', 'Controladoria', 'Perícia Contábil', 'Custos', 'Direito Tributário', 'Finanças Corporativas'],
+    'Marketing': ['Marketing Digital', 'Branding', 'Vendas', 'Publicidade', 'Pesquisa de Mercado', 'Redes Sociais', 'SEO', 'E-mail Marketing'],
+    'RH / Recursos Humanos': ['Recrutamento e Seleção', 'Treinamento e Desenvolvimento', 'Clima Organizacional', 'Cargos e Salários', 'Departamento Pessoal', 'Endomarketing', 'Liderança', 'Gestão de Pessoas'],
+    'Logística': ['Cadeia de Suprimentos', 'Gestão de Estoques', 'Transporte', 'Armazenagem', 'Logística Reversa', 'Compras', 'Distribuição', 'Supply Chain'],
+    'Jornalismo': ['Reportagem', 'Editoração', 'Mídias Digitais', 'Fotojornalismo', 'Telejornalismo', 'Rádio', 'Ética', 'Assessoria de Imprensa'],
+    'Publicidade': ['Criação Publicitária', 'Planejamento de Mídia', 'Redação Publicitária', 'Direção de Arte', 'Branding', 'Marketing Digital', 'Pesquisa', 'Comportamento do Consumidor'],
+    'Relações Internacionais': ['Diplomacia', 'Comércio Exterior', 'Geopolítica', 'Direito Internacional', 'Economia Internacional', 'Organizações Internacionais', 'Cultura Global', 'Negociações'],
+    'Design': ['Design Gráfico', 'Design de Produto', 'UX/UI', 'Design de Interiores', 'Design de Moda', 'Design de Jogos', 'Tipografia', 'Branding'],
+    'Gastronomia': ['Cozinha Brasileira', 'Cozinha Internacional', 'Confeitaria', 'Panificação', 'Gestão de Restaurantes', 'Enologia', 'Nutrição', 'Cozinha Molecular'],
+    'Turismo': ['Hotelaria', 'Agências de Viagem', 'Eventos', 'Turismo Cultural', 'Ecoturismo', 'Aviação', 'Cruzeiros', 'Gestão Hoteleira'],
+    'Educação Física': ['Esportes Coletivos', 'Esportes Individuais', 'Personal Trainer', 'Fisiologia do Exercício', 'Saúde Coletiva', 'Lazer', 'Natação', 'Musculação'],
+    'Música': ['Teoria Musical', 'Piano', 'Violão', 'Canto', 'Bateria', 'Composição', 'Arranjo', 'História da Música'],
+    'Astronomia': ['Astrofísica', 'Cosmologia', 'Planetologia', 'Astronomia Observacional', 'Galáxias', 'Estrelas', 'Sistema Solar', 'Astrobiologia'],
+    'Ciências Sociais': ['Sociologia', 'Antropologia', 'Ciência Política', 'Pesquisa Social', 'Movimentos Sociais', 'Cultura', 'Estratificação', 'Cidadania'],
+    'Serviço Social': ['Políticas Públicas', 'Assistência Social', 'Projetos Sociais', 'Direitos Humanos', 'Terceiro Setor', 'Família', 'Crianças e Adolescentes', 'Idosos'],
+    'Segurança da Informação': ['Redes de Computadores', 'Criptografia', 'Pentest', 'Forense Digital', 'LGPD', 'Firewalls', 'Malwares', 'Engenharia Social'],
+    'Agronomia': ['Ciência do Solo', 'Fitotecnia', 'Entomologia', 'Fitopatologia', 'Máquinas Agrícolas', 'Irrigação', 'Pecuária', 'Economia Rural'],
+    'Francês': ['Grammaire', 'Vocabulaire', 'Conjugaison', 'Compréhension Orale', 'Expression Écrite', 'Culture Française', 'Littérature', 'DELF/DALF'],
+    'Alemão': ['Grammatik', 'Wortschatz', 'Konjugation', 'Hörverstehen', 'Schreiben', 'Kultur', 'Literatur', 'Goethe-Zertifikat'],
+    'Italiano': ['Grammatica', 'Vocabolario', 'Coniugazione', 'Comprensione', 'Scrittura', 'Cultura Italiana', 'Letteratura', 'CILS/CELI'],
+    'Japonês': ['Hiragana', 'Katakana', 'Kanji', 'Gramática', 'Vocabulário', 'Conversação', 'Cultura Japonesa', 'JLPT'],
+    'Coreano': ['Hangul', 'Gramática', 'Vocabulário', 'Conversação', 'Cultura Coreana', 'K-Drama/K-Pop', 'Escrita', 'TOPIK'],
+    'Mandarim': ['Pinyin', 'Caracteres', 'Gramática', 'Vocabulário', 'Conversação', 'Cultura Chinesa', 'Escrita', 'HSK'],
+    'Libras': ['Alfabeto Manual', 'Sinais Básicos', 'Gramática de Libras', 'Vocabulário', 'Classificadores', 'Cultura Surda', 'História da Surdez', 'Interpretação'],
+    'Russo': ['Alfabeto Cirílico', 'Gramática', 'Vocabulário', 'Conversação', 'Cultura Russa', 'Literatura', 'Verbos', 'Casos'],
+    'Árabe': ['Alfabeto Árabe', 'Gramática', 'Vocabulário', 'Conversação', 'Cultura Árabe', 'Literatura', 'Dialetos', 'Escrita']
+};
+
+function getAreasMateria(materia) {
+    return areasPorMateria[materia] || ['Geral', 'Conceitos Básicos', 'Aprofundamento', 'Exercícios', 'Aplicações'];
+}
+
+function selecionarArea(materia, area) {
+    estado.areaSelecionada = { materia, area };
+    document.getElementById('temaInput').value = area + ' de ' + materia;
+    mostrarAba('gerador');
+    mostrarToast('📚 Área selecionada: ' + area, 'sucesso');
+}
+
+// ============================================================
+//               GERADOR INTELIGENTE DE PERGUNTAS
+// ============================================================
+
+function gerarPerguntasDoTema(tema, materia, qtd, dificuldade) {
+    const t = tema.toLowerCase();
+    let banco = [];
+    
+    if (materia === 'Espanhol' || t.includes('espanhol') || t.includes('verb') || t.includes('ser') || t.includes('estar')) {
+        banco = [
+            {p: 'Conjugue o verbo "ser" no presente indicativo', r: 'Yo soy, Tú eres, Él/Ella es, Nosotros somos, Ustedes son, Ellos son. Usado para características permanentes, profissões, nacionalidade, hora e data.'},
+            {p: 'Qual a diferença entre SER e ESTAR em espanhol?', r: 'SER = permanente/essência (origem, profissão, características). ESTAR = temporário/estado (humor, localização, saúde, aparência momentânea).'},
+            {p: 'Conjugue "tener" no presente', r: 'Yo tengo, Tú tienes, Él tiene, Nosotros tenemos, Ellos tienen. Significa "ter" e também "tener que + infinitivo" (ter que fazer algo).'},
+            {p: 'O que significa "me llamo"?', r: 'Significa "Eu me chamo". Pergunta: "¿Cómo te llamas?" Resposta: "Me llamo [seu nome]".'},
+            {p: 'Quais são os artigos definidos em espanhol?', r: 'EL (masc sg), LA (fem sg), LOS (masc pl), LAS (fem pl). Concordam em gênero e número com o substantivo.'},
+            {p: 'Quais são os artigos indefinidos?', r: 'UN (masc sg), UNA (fem sg), UNOS (masc pl), UNAS (fem pl). Equivalentes a "um, uma, uns, umas".'},
+            {p: 'Conjugue "hablar" no presente', r: 'Yo hablo, Tú hablas, Él habla, Nosotros hablamos, Ellos hablan. Verbo regular terminado em -AR.'},
+            {p: 'Como se diz "Eu gosto de estudar" em espanhol?', r: '"Me gusta estudiar". O verbo "gustar" é especial: o que se gosta é o sujeito, a pessoa é o complemento indireto.'},
+            {p: 'O que é o pretérito indefinido?', r: 'Tempo passado de ações concluídas e pontuais. Terminações: -é, -aste, -ó, -amos, -aron (verbos -AR). Ex: hablé, comí, viví.'},
+            {p: 'Como perguntar formalmente "Qual seu nome?"', r: '"¿Cómo se llama usted?" Usa "usted" para formalidade, conjugando como 3ª pessoa do singular.'}
+        ];
+    }
+    else if (t.includes('célula') || t.includes('celula') || t.includes('biologia') || materia.includes('Biologia') || materia.includes('Ciências')) {
+        banco = [
+            {p: 'Principais partes da célula eucariótica', r: 'Membrana plasmática (controle), citoplasma, núcleo (DNA), mitocôndrias (energia), retículo endoplasmático (transporte), complexo de Golgi (empacotamento), lisossomos (digestão).'},
+            {p: 'Diferença entre célula animal e vegetal', r: 'Vegetal tem parede celular (celulose), cloroplastos (fotossíntese), vacúolo central grande. Animal tem centríolos e forma irregular.'},
+            {p: 'Função da membrana plasmática', r: 'Camada dupla de fosfolipídios. Delimita a célula, controla entrada/saída de substâncias (permeabilidade seletiva), reconhecimento celular.'},
+            {p: 'Função do núcleo celular', r: 'Armazena o DNA, controla todas as atividades celulares, local da transcrição de RNA e duplicação do DNA antes da divisão.'},
+            {p: 'O que são mitocôndrias?', r: 'Organelas com dupla membrana que realizam a respiração celular, produzindo ATP (energia). Possuem DNA próprio e se autoduplicam.'},
+            {p: 'Explique a fotossíntese', r: 'Processo nos cloroplastos das plantas. Usa CO₂ + água + luz. Produz glicose (energia) + oxigênio. Fórmula: 6CO₂ + 6H₂O + luz → C₆H₁₂O₆ + 6O₂.'},
+            {p: 'O que é DNA?', r: 'Ácido Desoxirribonucleico. Molécula em dupla hélice com a informação genética. Bases: A (adenina), T (timina), C (citosina), G (guanina). A-T, C-G.'},
+            {p: 'Tipos de tecidos animais', r: '1) Epitelial: revestimento; 2) Conjuntivo: sustentação; 3) Muscular: movimento; 4) Nervoso: impulsos.'},
+            {p: 'O que é osmose?', r: 'Movimento da água através de membrana semipermeável, do meio hipotônico (menos soluto) para o hipertônico (mais soluto).'},
+            {p: 'Tipos de transporte na membrana', r: 'Passivo (sem energia): difusão simples, osmose, difusão facilitada. Ativo (com energia/ATP): bomba de Na/K, endocitose, exocitose.'}
+        ];
+    }
+    else if (t.includes('revolução') || t.includes('francesa') || materia === 'História') {
+        banco = [
+            {p: 'Quando ocorreu a Revolução Francesa?', r: '1789 a 1799. Marco inicial: 14 de julho de 1789 (Queda da Bastilha). Transformou a França e inspirou o mundo moderno.'},
+            {p: 'Causas da Revolução Francesa', r: '1) Crise econômica; 2) Desigualdade social (3 Estados); 3) Absolutismo; 4) Ideias Iluministas; 5) Má colheita de 1788-89.'},
+            {p: 'Os 3 Estados da França', r: '1º Clero (1%, isento); 2º Nobreza (2%, isento); 3º Povo (97%, burgueses + camponeses) — pagava TODOS impostos, sem poder político.'},
+            {p: 'O que foi a Queda da Bastilha?', r: '14/07/1789. Povo invadiu a prisão da Bastilha, símbolo do absolutismo. Marco inicial da Revolução. Hoje é Dia Nacional da França.'},
+            {p: 'Declaração dos Direitos do Homem', r: '26/08/1789. "Os homens nascem e permanecem livres e iguais em direitos". Inspirado no Iluminismo. Base dos direitos humanos modernos.'},
+            {p: 'O que aconteceu com Luís XVI?', r: 'Rei da França durante a revolução. Tentou fugir, foi capturado, julgado e guilhotinado em 21/01/1793 por traição.'},
+            {p: 'O Período do Terror', r: '1793-1794. Fase radical liderada por Robespierre (Jacobinos). Milhares guilhotinados por "contrarrevolução". Terminou com a queda do próprio Robespierre.'},
+            {p: 'Quem foi Napoleão Bonaparte?', r: 'General que subiu ao poder em 1799, tornou-se imperador em 1804. Unificou a França com o Código Napoleônico. Derrotado em Waterloo (1815).'},
+            {p: 'Lema da Revolução Francesa', r: '"LIBERDADE, IGUALDADE E FRATERNIDADE". Ideais que inspiraram revoluções pelo mundo e a Declaração Universal dos Direitos Humanos.'},
+            {p: 'Consequências da Revolução Francesa', r: 'Fim do absolutismo; ascensão da burguesia; surgimento dos direitos humanos; nacionalismo; inspiração para independência do Brasil e outras revoluções.'}
+        ];
+    }
+    else if (t.includes('função') || t.includes('matemática') || t.includes('equação') || materia === 'Matemática') {
+        banco = [
+            {p: 'O que é função do 1º grau?', r: 'f(x) = ax + b, a ≠ 0. Gráfico é uma reta. "a" = coeficiente angular (inclinação). "b" = coeficiente linear (corta eixo y). a>0 crescente, a<0 decrescente.'},
+            {p: 'Fórmula de Bhaskara', r: 'Para ax² + bx + c = 0: x = [-b ± √(b² - 4ac)] / 2a. Δ = b² - 4ac. Δ>0 → 2 raízes; Δ=0 → 1 raiz dupla; Δ<0 → sem raízes reais.'},
+            {p: 'Domínio e imagem de função', r: 'Domínio: conjunto de valores que x pode assumir (entrada). Imagem: conjunto de valores que f(x) pode assumir (saída). Em f: A → B, A é domínio, B contradomínio.'},
+            {p: 'Função crescente vs decrescente', r: 'Crescente: quando x aumenta, f(x) aumenta (a > 0 na afim). Decrescente: quando x aumenta, f(x) diminui (a < 0 na afim). Constante: f(x) não varia.'},
+            {p: 'Resolva: 2x + 5 = 15', r: '2x = 15 - 5 → 2x = 10 → x = 10/2 → x = 5. Verificação: 2(5) + 5 = 10 + 5 = 15 ✓'},
+            {p: 'O que é função quadrática?', r: 'f(x) = ax² + bx + c, a ≠ 0. Gráfico é parábola. a > 0: concavidade para cima (tem mínimo). a < 0: para baixo (tem máximo). Vértice é ponto máximo/mínimo.'},
+            {p: 'Área de um triângulo', r: 'Área = (base × altura) / 2. Ou fórmula de Herão: A = √[p(p-a)(p-b)(p-c)], onde p é o semiperímetro.'},
+            {p: 'O que é π (pi)?', r: 'Relação entre circunferência e diâmetro: π = C/d. Valor ≈ 3,14159... É irracional. Área do círculo: A = πr². Comprimento: C = 2πr.'},
+            {p: 'Teorema de Pitágoras', r: 'Em triângulo retângulo: a² + b² = c², onde c é a hipotenusa (lado maior, oposto ao ângulo reto). Ex: 3-4-5: 9+16=25 ✓'},
+            {p: 'Porcentagem: quanto é 25% de 80?', r: '25% = 0,25 = 1/4. 0,25 × 80 = 20. Ou regra de 3: 80 --- 100%, x --- 25%. x = (80×25)/100 = 20.'}
+        ];
+    }
+    else if (materia === 'Inglês' || t.includes('inglês') || t.includes('to be')) {
+        banco = [
+            {p: 'Conjugue o verbo "to be" no presente', r: 'I am, You are, He/She/It is, We are, You are, They are. Contrações: I\'m, You\'re, He\'s, She\'s, It\'s, We\'re, They\'re.'},
+            {p: 'Quando usar "to be"?', r: '1) Identidade (I am a student); 2) Origem (She is from Brazil); 3) Idade (He is 20); 4) Localização (They are at home); 5) Estados (We are happy).'},
+            {p: 'Diferença entre DO e MAKE', r: 'DO = ações/trabalhos/atividades (do homework, do exercise, do your best). MAKE = construir/criar/produzir algo (make a cake, make a plan, make money, make a mistake).'},
+            {p: 'Pronomes pessoais em inglês', r: 'Sujeito: I, You, He, She, It, We, They. Objeto: Me, You, Him, Her, It, Us, Them. Possessivos adjetivos: My, Your, His, Her, Its, Our, Their.'},
+            {p: 'Frases negativas com "to be"', r: 'Adicione "not": I am not (I\'m not), You are not (You aren\'t), He is not (He isn\'t), We are not (We aren\'t).'},
+            {p: 'Perguntas com "to be"', r: 'Inverta verbo e sujeito: Are you happy? Is she at home? Am I late? Com WH-: Where are you from? What is your name?'},
+            {p: 'Presente Simples - regras', r: 'Afirmativa: I/You/We/They + verbo base; He/She/It + verbo + S/ES. Negativa: don\'t/doesn\'t + verbo. Interrogativa: Do/Does + sujeito + verbo?'},
+            {p: 'Quando adicionar S, ES, IES no Presente Simples?', r: 'S: maioria (works, plays). ES: termina em s, sh, ch, x, o (goes, watches, does). IES: termina em consoante + y → troca y por IES (studies, flies).'},
+            {p: 'Diferença entre THERE IS e THERE ARE', r: 'There is = singular (há/existe um). Ex: There is a book. There are = plural (há/existem vários). Ex: There are many students. Negativo: There isn\'t / There aren\'t.'},
+            {p: 'Diferença entre SAY e TELL', r: 'Say = dizer algo (não precisa mencionar a pessoa diretamente). Ex: She said "hello". Tell = contar/dizer a ALGUÉM (sempre tem objeto). Ex: She told me a story. Tell the truth, tell a lie.'}
+        ];
+    }
+    else if (materia === 'Física' || t.includes('mecânica') || t.includes('newton') || t.includes('movimento')) {
+        banco = [
+            {p: '3 Leis de Newton', r: '1ª (Inércia): corpo em repouso/MRU tende a permanecer se F_R = 0. 2ª (F=m·a): força = massa × aceleração. 3ª (Ação-Reação): toda ação tem reação de mesma intensidade e sentido oposto.'},
+            {p: 'Velocidade média', r: 'Vm = Δs / Δt. Deslocamento sobre tempo. Grandeza vetorial. Unidade SI: m/s. No dia a dia usamos km/h.'},
+            {p: 'Aceleração média', r: 'Am = Δv / Δt. Variação da velocidade sobre tempo. Mede quão rápido a velocidade muda. Unidade SI: m/s².'},
+            {p: 'Movimento Uniforme (MU)', r: 'Velocidade constante, aceleração nula. S = S₀ + v·t. Gráfico S×t é reta crescente se v>0. Gráfico v×t é reta horizontal.'},
+            {p: 'Movimento Uniformemente Variado (MUV)', r: 'Aceleração constante. v = v₀ + a·t. S = S₀ + v₀·t + (a·t²)/2. Torricelli: v² = v₀² + 2·a·Δs (não tem tempo).'},
+            {p: 'O que é força?', r: 'Interação entre corpos que causa mudança no movimento ou deformação. Grandeza vetorial. Unidade SI: Newton (N) = kg·m/s².'},
+            {p: 'Lei da Gravitação Universal', r: 'F = G·(m₁·m₂)/d². Força proporcional ao produto das massas e inversamente proporcional ao quadrado da distância. G = 6,67×10⁻¹¹ N·m²/kg².'},
+            {p: 'Energia Cinética e Potencial', r: 'Cinética (Ec): energia do movimento → Ec = (m·v²)/2. Potencial Gravitacional (Epg): energia da altura → Epg = m·g·h. Em sistema conservativo, energia mecânica se conserva.'},
+            {p: 'Trabalho de uma força', r: 'τ = F·d·cosθ. Força vezes deslocamento vezes cosseno do ângulo entre eles. Força perpendicular NÃO realiza trabalho (cos90°=0). Unidade: Joule (J).'},
+            {p: 'Impulso e Quantidade de Movimento', r: 'Q = m·v (massa × velocidade). Impulso I = F·Δt = ΔQ. Teorema do Impulso: impulso da força resultante = variação da quantidade de movimento.'}
+        ];
+    }
+    else if (materia === 'Química' || t.includes('tabela periódica') || t.includes('átomo') || t.includes('atomo')) {
+        banco = [
+            {p: 'Partículas do átomo', r: 'Prótons: +1, massa ~1u, núcleo. Nêutrons: 0, massa ~1u, núcleo. Elétrons: -1, massa ~1/1836u, eletrosfera. Z = nº prótons. A = prótons + nêutrons.'},
+            {p: 'Tabela Periódica', r: 'Organização dos elementos por Z crescente. Mendeleiev (1869). Períodos = linhas horizontais (7). Grupos = colunas (18). Mesmo grupo = propriedades semelhantes.'},
+            {p: 'Famílias da Tabela Periódica', r: 'Grupo 1: Metais Alcalinos. Grupo 2: Alcalinos Terrosos. 3-12: Metais de Transição. 17: Halogênios. 18: Gases Nobres (estáveis, baixa reatividade).'},
+            {p: 'Ligações Químicas', r: 'Iônica: transferência de elétrons (metal + ametal, ex: NaCl). Covalente: compartilhamento (ametal + ametal, ex: H₂O). Metálica: "mar de elétrons" livres entre metais.'},
+            {p: 'Leis Ponderais', r: 'Proust: proporções definidas. Lavoisier: conservação das massas (nada se cria, nada se perde). Dalton: proporções múltiplas.'},
+            {p: 'Balanceamento de equações', r: 'Nº de átomos de cada elemento deve ser igual nos dois lados. Método tentativa. Ex: CH₄ + 2O₂ → CO₂ + 2H₂O. C:1=1 ✓, H:4=4 ✓, O:4=4 ✓.'},
+            {p: 'Concentração Molar (M)', r: 'M = n / V, onde n = nº de mols, V = volume em L. n = massa / massa molar. Unidade: mol/L. Importante para cálculos de soluções e estequiometria.'},
+            {p: 'pH e pOH', r: 'pH = -log[H⁺]. pOH = -log[OH⁻]. Água pura: [H⁺] = [OH⁻] = 10⁻⁷ → pH = 7 (neutro). pH < 7 = ácido. pH > 7 = básico. pH + pOH = 14 a 25°C.'},
+            {p: 'Tipos de reações químicas', r: '1) Síntese: A + B → C. 2) Decomposição: C → A + B. 3) Deslocamento: A + BC → AC + B. 4) Dupla troca: AB + CD → AD + CB. 5) Combustão: composto + O₂ → CO₂ + H₂O.'},
+            {p: 'Estequiometria', r: 'Cálculo quantitativo de produtos/reagentes. Passos: 1) Balancear; 2) Converter dados para mols; 3) Regra de 3 com coeficientes; 4) Converter para unidade desejada.'}
+        ];
+    }
+    else if (materia === 'Geografia' || t.includes('geografia') || t.includes('brasil') || t.includes('clima')) {
+        banco = [
+            {p: 'Divisão regional do Brasil (IBGE)', r: '5 regiões: Norte (7 estados), Nordeste (9), Sudeste (4), Sul (3), Centro-Oeste (4 + DF).'},
+            {p: 'Biomas brasileiros', r: 'Amazônia (maior floresta tropical), Cerrado (savana), Mata Atlântica (mais devastada), Caatinga (semiárido NE), Pampa (RS, campos), Pantanal (MS, área alagável).'},
+            {p: 'Climas do Brasil', r: 'Equatorial (quente e úmido - Amazônia). Tropical (quente com estações). Semiárido (seco, irregular - Caatinga). Subtropical (estações definidas - Sul). Litorâneo (amenizado pelo mar).'},
+            {p: 'O que é globalização?', r: 'Integração econômica, cultural, política e social entre países. Facilitada por tecnologia e transporte. Positivo: trocas, tecnologia. Negativo: desigualdades, exploração.'},
+            {p: 'Placas Tectônicas', r: 'Crosta dividida em placas que se movem. Limites: convergentes (choque → montanhas/fossas), divergentes (afastamento → assoalho oceânico), transformantes (deslizamento → terremotos).'},
+            {p: 'Formas de relevo', r: 'Planícies: terrenos planos, baixas altitudes. Planaltos: terrenos elevados, topo aplainado. Montanhas: formas acidentadas, grandes altitudes. Depressões: áreas mais baixas.'},
+            {p: 'Hidrografia brasileira', r: 'Bacia Amazônica (maior do mundo). Bacia Tocantins-Araguaia. Bacia São Francisco ("Velho Chico"). Bacia Paraná (rios Paraná, Uruguai, Paraguai).'},
+            {p: 'Urbanização', r: 'Crescimento das cidades e migração rural→urbana. Brasil: ~87% urbano. Problemas: favelas, trânsito, poluição, desigualdade, falta de infraestrutura.'},
+            {p: 'Indústria brasileira', r: 'Sudeste concentra maior parte (SP, RJ, MG). Evolução: substituição de importações (Getúlio Vargas), desenvolvimentismo (JK), neoliberalismo (anos 90). Atualmente: descentralização.'},
+            {p: 'Agricultura brasileira', r: 'Potência mundial. Exporta: soja, café, açúcar, carne, milho, suco de laranja. Latifúndios vs minifúndios. Agronegócio vs agricultura familiar.'}
+        ];
+    }
+    else if (materia === 'Português' || t.includes('gramática') || t.includes('verbo') || t.includes('português')) {
+        banco = [
+            {p: 'Classes de palavras', r: '10 classes: Substantivo, Artigo, Adjetivo, Numeral, Pronome, Verbo, Advérbio, Preposição, Conjunção, Interjeição.'},
+            {p: 'Tipos de substantivos', r: 'Comuns vs Próprios. Concretos vs Abstratos. Simples vs Compostos. Primitivos vs Derivados. Coletivos: rebanho, cardume, biblioteca.'},
+            {p: 'Tempos verbais do indicativo', r: 'Pretérito: perfeito (ação concluída), imperfeito (contínua no passado), mais-que-perfeito (anterior a outra). Presente: atual/habitual. Futuro: do presente e do pretérito.'},
+            {p: 'Modos verbais', r: 'Indicativo: fatos reais/certezas. Subjuntivo: desejos/dúvidas/hipóteses. Imperativo: ordens/pedidos/conselhos (afirmativo e negativo).'},
+            {p: 'Concordância Nominal', r: 'Adjetivos, artigos, pronomes concordam em GÊNERO e NÚMERO com o substantivo. Ex: "As belas casas".'},
+            {p: 'Concordância Verbal', r: 'Verbo concorda em NÚMERO e PESSOA com o sujeito. Casos especiais: sujeito composto (plural), sujeito coletivo (singular), sujeito indeterminado (3ª pessoa singular + se).'},
+            {p: 'Regência Verbal', r: 'Relação entre verbo e complementos. Preposição exigida pelo verbo. Ex: "Gosto DE música" (gostar exige DE). "Assisto AO filme" (assistir a algo).'},
+            {p: 'Crase', r: 'Fusão de "a" (artigo/preposição) + "a" (vogal inicial). Regra prática: troque "a" por "pela" → se couber, tem crase. Não usa antes de palavra masculina, verbo, pronome.'},
+            {p: 'Figuras de linguagem', r: 'Comparação (usa conectivo), Metáfora (comparação implícita), Personificação (qualidades humanas a seres inanimados), Hipérbole (exagero), Metonímia (substituição por relação próxima), Sinestesia (mistura de sentidos).'},
+            {p: 'Tipos de oração coordenada', r: 'Aditivas (e, nem), Adversativas (mas, porém), Alternativas (ou, ora...ora), Conclusivas (logo, pois, portanto), Explicativas (pois, porque). Assindéticas: justapostas sem conjunção.'}
+        ];
+    }
+    else {
+        banco = [
+            {p: `O que é ${tema}?`, r: `${tema} é um assunto/conceito fundamental que envolve o estudo de princípios, características e aplicações específicas. Para dominá-lo: 1) entenda a definição; 2) estude exemplos; 3) resolva exercícios; 4) revise periodicamente.`},
+            {p: `Principais pontos sobre ${tema}`, r: `Os pilares de ${tema} incluem: definição, conceitos fundamentais, tipos/classificações, exemplos, aplicações práticas, importância e relação com outros temas da disciplina.`},
+            {p: `Como aplicar ${tema} em exercícios?`, r: `1) Compreenda a teoria; 2) Identifique o que é pedido; 3) Aplique o conceito/fórmula; 4) Resolva com cuidado; 5) Verifique a resposta; 6) Resolva exercícios variados para fixar.`},
+            {p: `Importância de estudar ${tema}`, r: `Estudar ${tema} é fundamental porque serve de base para outros assuntos, cai em provas e vestibulares, tem aplicação prática no dia a dia e desenvolve o raciocínio.`},
+            {p: `Erros comuns ao estudar ${tema}`, r: `1) Decorar sem entender; 2) Pular etapas; 3) Não praticar exercícios; 4) Confundir com conceitos parecidos; 5) Revisar pouco; 6) Não tirar dúvidas rapidamente.`},
+            {p: `Como memorizar bem ${tema}?`, r: `Técnicas: 1) Flashcards com revisão espaçada; 2) Explique em voz alta como se ensinasse; 3) Associe a coisas que já sabe; 4) Resolva exercícios; 5) Faça resumos e mapas mentais; 6) Durma bem!`},
+            {p: `Resuma ${tema} em ideias-chave`, r: `Ideias fundamentais: 1) Definição clara; 2) Conceitos essenciais; 3) Fórmulas/regras principais; 4) Exemplos resolvidos; 5) Aplicações práticas; 6) Exercícios para fixar.`},
+            {p: `Temas relacionados com ${tema}`, r: `${tema} relaciona-se com diversos outros assuntos. Para entender melhor, estude também: os pré-requisitos que servem de base, aplicações práticas e como aparece em diferentes contextos.`},
+            {p: `Como ${tema} aparece nas provas?`, r: `Geralmente aparece em: questões de múltipla escolha (conceitos), exercícios de resolução (aplicação), dissertativas (explicação), problemas contextualizados (interpretação + aplicação). Faça simulados!`},
+            {p: `Plano de estudo para ${tema}`, r: `Dia 1: teoria básica + exemplos. Dia 2: exercícios fáceis. Dia 3: exercícios médios. Dia 4: exercícios difíceis. Dia 7: revisão com flashcards. Dia 15: nova revisão. Dia 30: revisão final.`}
+        ];
+    }
+    
+    if (dificuldade === 'facil') {
+        banco = banco.slice(0, Math.min(qtd, banco.length)).map(p => ({...p, p: '[Fácil] ' + p.p}));
+    } else if (dificuldade === 'dificil') {
+        banco = banco.slice(-Math.min(qtd, banco.length)).map(p => ({...p, p: '[Difícil] ' + p.p}));
+    } else {
+        banco = banco.slice(0, Math.min(qtd, banco.length));
+    }
+    
+    return banco;
+}
+
+// ============================================================
+//               FUNÇÕES DE INTERFACE
+// ============================================================
+
+function mostrarToast(mensagem, tipo = 'normal') {
+    const toast = document.getElementById('toast');
+    toast.textContent = mensagem;
+    toast.className = 'toast';
+    if (tipo === 'erro') toast.classList.add('erro');
+    if (tipo === 'sucesso') toast.classList.add('sucesso');
+    
+    setTimeout(() => toast.classList.add('mostrar'), 10);
+    setTimeout(() => toast.classList.remove('mostrar'), 3000);
+}
+
+function abrirMenuUsuario() {
+    document.getElementById('menuUsuario').classList.toggle('escondido');
+}
+
+function fecharMenuUsuario(event) {
+    if (!event || event.target.id === 'menuUsuario') {
+        document.getElementById('menuUsuario').classList.add('escondido');
+    }
+}
+
+function alternarTema() {
+    estado.temaEscuro = !estado.temaEscuro;
+    document.body.classList.toggle('dark', estado.temaEscuro);
+    document.getElementById('textoTema').textContent = estado.temaEscuro ? 'Modo Claro' : 'Modo Escuro';
+    salvarDadosUsuario();
+    // Atualizar ranking se estiver visível
+    const abaRanking = document.getElementById('aba-ranking');
+    if (abaRanking && abaRanking.classList.contains('active')) {
+        renderizarRanking();
+    }
+    // Atualizar stats no painel
+    atualizarStats();
+}
+
+function mostrarAba(nome) {
+    // Conteúdo
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById('aba-' + nome).classList.add('active');
+    
+    // Abas desktop
+    document.querySelectorAll('.aba').forEach(b => {
+        b.classList.remove('tab-ativo');
+        b.style.color = 'var(--texto-claro)';
+        if (b.dataset.aba === nome) {
+            b.classList.add('tab-ativo');
+            b.style.color = '';
+        }
+    });
+    
+    // Nav inferior mobile
+    document.querySelectorAll('.nav-inferior button').forEach(b => {
+        b.classList.remove('ativo');
+        b.style.color = '';
+        if (b.dataset.aba === nome) {
+            b.classList.add('ativo');
+            if (nome === 'gerador') b.style.color = 'var(--roxo)';
+        }
+    });
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Se abriu a aba de ranking, garantir que está atualizada
+    if (nome === 'ranking') {
+        setTimeout(() => renderizarRanking(), 100);
+    }
+}
+
+function mudarNivel() {
+    estado.nivel = document.getElementById('nivelSelect').value;
+    salvarDadosUsuario();
+    renderizarMaterias();
+}
+
+function mostrarDicas() {
+    document.getElementById('modalDicas').classList.remove('escondido');
+}
+
+function fecharDicas() {
+    document.getElementById('modalDicas').classList.add('escondido');
+}
+
+// ============================================================
+//               RENDERIZAÇÃO E INICIALIZAÇÃO
+// ============================================================
+
+
+// ============================================================
+//               RENDERIZAR RANKING E DESAFIOS
+// ============================================================
+
+// Divisão atualmente selecionada no ranking
+let divisaoSelecionada = 'todas';
+
+// Retorna o nome da divisão baseado no XP
+function getNomeDivisao(xp) {
+    return getNivelAtual(xp).nome;
+}
+
+// Retorna o índice da divisão (0 a 7)
+function getIndiceDivisao(xp) {
+    const niveis = estado.niveisXP || dadosPadrao().niveisXP;
+    for (let i = niveis.length - 1; i >= 0; i--) {
+        if (xp >= niveis[i].min) return i;
+    }
+    return 0;
+}
+
+// Renderiza as abas de divisão
+function renderizarAbasDivisao() {
+    const container = document.getElementById('abasDivisao');
+    if (!container) return;
+    
+    const niveis = estado.niveisXP || dadosPadrao().niveisXP;
+    const minhaDivisao = getIndiceDivisao(estado.xp);
+    
+    let html = `<button onclick="selecionarDivisao('todas')" class="divisao-aba px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition ${divisaoSelecionada === 'todas' ? 'divisao-aba-ativa' : ''}" data-divisao="todas" style="${divisaoSelecionada === 'todas' ? 'background: linear-gradient(135deg, var(--azul), var(--roxo)); color: white;' : 'background: var(--fundo); color: var(--texto-claro);'}">
+        🌐 Geral
+    </button>`;
+    
+    niveis.forEach((n, i) => {
+        const ativa = divisaoSelecionada === n.nome;
+        const ehMinha = i === minhaDivisao;
+        html += `<button onclick="selecionarDivisao('${n.nome}')" class="divisao-aba px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition ${ativa ? 'divisao-aba-ativa' : ''}" data-divisao="${n.nome}" style="${ativa ? `background: ${n.cor}; color: white;` : 'background: var(--fundo); color: var(--texto-claro);'} ${ehMinha ? 'border: 2px solid ' + n.cor + ';' : ''}">
+            ${n.icone} ${n.nome}${ehMinha ? ' ⭐' : ''}
+        </button>`;
+    });
+    
+    container.innerHTML = html;
+}
+
+function selecionarDivisao(nome) {
+    divisaoSelecionada = nome;
+    renderizarAbasDivisao();
+    renderizarRanking();
+}
+
+// Filtra o ranking por divisão selecionada
+function filtrarRankingPorDivisao(lista) {
+    if (divisaoSelecionada === 'todas') return lista;
+    return lista.filter(u => getNomeDivisao(u.xp) === divisaoSelecionada);
+}
+
+function renderizarRanking() {
+    if (!estado.niveisXP) estado.niveisXP = dadosPadrao().niveisXP;
+    if (!estado.rankingSimulado) estado.rankingSimulado = dadosPadrao().rankingSimulado;
+    if (!estado.desafios) estado.desafios = dadosPadrao().desafios;
+    
+    const nivelAtual = getNivelAtual(estado.xp);
+    const proximoNivel = getProximoNivel(estado.xp);
+    const progresso = getProgressoNivel(estado.xp);
+    const posicao = getPosicaoUsuario();
+    
+    document.getElementById('nivelAtualNome').textContent = nivelAtual.icone + ' ' + nivelAtual.nome;
+    document.getElementById('nivelAtualNome').style.color = 'white';
+    document.getElementById('xpTotalRanking').textContent = estado.xp;
+    document.getElementById('posicaoRanking').textContent = 'Posição Geral: #' + posicao + ' de ' + getRankingCompleto().length;
+    document.getElementById('nivelAtualBarra').textContent = nivelAtual.icone + ' ' + nivelAtual.nome;
+    document.getElementById('proximoNivelBarra').textContent = proximoNivel ? proximoNivel.icone + ' ' + proximoNivel.nome : 'Nível Máximo!';
+    document.getElementById('nivelBarra').style.width = progresso + '%';
+    document.getElementById('progressoNivelTexto').textContent = progresso + '% para o próximo nível';
+    
+    // === ATUALIZAR CARD DE DIVISÃO ATUAL ===
+    const iconeDiv = document.getElementById('iconeDivisaoAtual');
+    const nomeDiv = document.getElementById('nomeDivisaoAtual');
+    const posDiv = document.getElementById('posicaoDivisao');
+    const totalDiv = document.getElementById('totalDivisao');
+    const divAtualBarra = document.getElementById('divisaoAtualBarra');
+    const proxDivBarra = document.getElementById('proximaDivisaoBarra');
+    const barraDiv = document.getElementById('barraProgressoDivisao');
+    
+    if (iconeDiv) iconeDiv.textContent = nivelAtual.icone;
+    if (nomeDiv) nomeDiv.textContent = nivelAtual.nome;
+    if (divAtualBarra) divAtualBarra.textContent = nivelAtual.icone + ' ' + nivelAtual.nome;
+    if (proxDivBarra) proxDivBarra.textContent = proximoNivel ? proximoNivel.icone + ' ' + proximoNivel.nome : '👑 Máximo!';
+    if (barraDiv) barraDiv.style.width = progresso + '%';
+    
+    // Calcular posição dentro da própria divisão
+    const rankingCompleto = getRankingCompleto();
+    const minhaDivisao = getNomeDivisao(estado.xp);
+    const usuariosDaDivisao = rankingCompleto.filter(u => getNomeDivisao(u.xp) === minhaDivisao);
+    const posicaoNaDivisao = usuariosDaDivisao.findIndex(u => u.eu) + 1;
+    
+    if (posDiv) posDiv.textContent = '#' + (posicaoNaDivisao > 0 ? posicaoNaDivisao : '--');
+    if (totalDiv) totalDiv.textContent = 'de ' + usuariosDaDivisao.length + ' estudantes';
+    
+    // Renderizar abas de divisão
+    renderizarAbasDivisao();
+    
+    // Atualizar status do ranking
+    const statusEl = document.getElementById('statusRanking');
+    if (statusEl) {
+        const totalReais = firebaseAtivo ? rankingTempoReal.length : 1;
+        if (firebaseAtivo && rankingTempoReal.length > 0) {
+            statusEl.textContent = '⚡ AO VIVO — ' + rankingTempoReal.length + ' usuários reais';
+            statusEl.style.cssText = 'background: rgba(34,197,94,0.15); color: #16a34a;';
+        } else if (firebaseAtivo) {
+            statusEl.textContent = '🔄 Aguardando usuários reais...';
+            statusEl.style.cssText = 'background: rgba(59,130,246,0.15); color: #3b82f6;';
+        } else {
+            statusEl.textContent = '👤 Apenas você (sem bots) — ative o Firebase para ver outros';
+            statusEl.style.cssText = 'background: rgba(148,163,184,0.15); color: var(--texto-claro);';
+        }
+    }
+    
+    // Ranking (filtrado por divisão selecionada) - rankingCompleto já declarado acima
+    const ranking = filtrarRankingPorDivisao(rankingCompleto);
+    const containerRanking = document.getElementById('listaRanking');
+    
+    if (ranking.length === 0) {
+        containerRanking.innerHTML = '<p class="text-center py-8 text-sm" style="color: var(--texto-claro);">Nenhum estudante nesta divisão ainda. Seja o primeiro! 🚀</p>';
+    } else if (ranking.length === 1 && ranking[0].eu) {
+        // Só o usuário atual - mostrar mensagem amigável
+        containerRanking.innerHTML = `
+            <div class="text-center py-8">
+                <i class="ri-trophy-line text-5xl mb-3 opacity-30" style="color: var(--dourado);"></i>
+                <p class="font-semibold mb-1">🏆 Você é o primeiro estudante!</p>
+                <p class="text-sm" style="color: var(--texto-claro);">Compartilhe o link do app com seus amigos<br>para eles entrarem no ranking também! 📱</p>
+                <p class="text-xs mt-3 px-4 py-2 rounded-lg inline-block" style="background: rgba(59,130,246,0.1); color: var(--azul);">
+                    🔗 Compartilhe: willianfilho.github.io/educaultra.com
+                </p>
+            </div>
+            <div class="flex items-center gap-3 p-3 rounded-xl ring-2 ring-amber-400" style="background: rgba(245,158,11,0.08);">
+                <span class="w-8 text-center font-bold text-xl" style="color: var(--texto-claro);">🥇</span>
+                <span class="text-2xl">🎯</span>
+                <div class="flex-1 min-w-0">
+                    <p class="font-semibold truncate text-amber-600">${ranking[0].nome}</p>
+                    <p class="text-xs" style="color: var(--texto-claro);">${getNivelAtual(ranking[0].xp).icone} ${getNivelAtual(ranking[0].xp).nome}</p>
+                </div>
+                <span class="font-bold" style="color: var(--azul);">${ranking[0].xp} XP</span>
+            </div>
+        `;
+    } else {
+    containerRanking.innerHTML = ranking.map((r, i) => {
+        const medalha = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`;
+        const nivel = getNivelAtual(r.xp);
+        const destaque = r.eu ? 'ring-2 ring-amber-400' : '';
+        return `
+            <div class="flex items-center gap-3 p-3 rounded-xl ${destaque}" style="background: ${r.eu ? 'rgba(245,158,11,0.08)' : 'var(--fundo)'};">
+                <span class="w-8 text-center font-bold ${i < 3 ? 'text-xl' : ''}" style="color: var(--texto-claro);">${medalha}</span>
+                <span class="text-2xl">${r.avatar}</span>
+                <div class="flex-1 min-w-0">
+                    <p class="font-semibold truncate ${r.eu ? 'text-amber-600' : ''}" style="${r.eu ? '' : 'color: var(--texto);'}">${r.nome}</p>
+                    <p class="text-xs" style="color: var(--texto-claro);">${nivel.icone} ${nivel.nome}</p>
+                </div>
+                <span class="font-bold" style="color: var(--azul);">${r.xp} XP</span>
+            </div>
+        `;
+    }).join('');
+    }
+    
+    // Desafios
+    const containerDesafios = document.getElementById('listaDesafios');
+    containerDesafios.innerHTML = estado.desafios.map(d => {
+        const progresso = Math.min(100, Math.floor((d.progresso / d.meta) * 100));
+        return `
+            <div class="p-3 rounded-xl ${d.feito ? 'opacity-60' : ''}" style="background: var(--fundo);">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <span>${d.feito ? '✅' : '🎯'}</span>
+                        <span class="font-medium text-sm">${d.nome}</span>
+                    </div>
+                    <span class="text-xs font-bold px-2 py-1 rounded" style="background: rgba(245,158,11,0.15); color: #d97706;">+${d.xp} XP</span>
+                </div>
+                <div class="w-full h-2 rounded-full overflow-hidden mb-1" style="background: var(--borda);">
+                    <div class="h-full rounded-full transition-all" style="width: ${progresso}%; background: ${d.feito ? '#22c55e' : 'linear-gradient(90deg, var(--azul), var(--roxo))'};"></div>
+                </div>
+                <p class="text-xs" style="color: var(--texto-claro);">${d.progresso}/${d.meta} ${d.feito ? '— Concluído!' : ''}</p>
+            </div>
+        `;
+    }).join('');
+    
+    // Níveis
+    const containerNiveis = document.getElementById('listaNiveis');
+    containerNiveis.innerHTML = estado.niveisXP.map(n => {
+        const atingido = estado.xp >= n.min;
+        return `
+            <div class="p-3 rounded-xl text-center ${atingido ? '' : 'opacity-40'}" 
+                style="background: ${atingido ? n.cor + '20' : 'var(--fundo)'}; border: 2px solid ${atingido ? n.cor : 'var(--borda)'};">
+                <span class="text-2xl block mb-1">${n.icone}</span>
+                <p class="font-bold text-sm" style="color: ${atingido ? n.cor : 'var(--texto-claro)'};">${n.nome}</p>
+                <p class="text-xs" style="color: var(--texto-claro);">${n.min} XP</p>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderizarMaterias() {
+    const dados = baseMaterias[estado.nivel];
+    document.getElementById('nomeNivel').textContent = dados.titulo;
+    const container = document.getElementById('listaMaterias');
+    
+    container.innerHTML = dados.lista.map(m => {
+        const areas = getAreasMateria(m.nome);
+        const areasHtml = areas.slice(0, 6).map(a => 
+            `<button onclick="selecionarArea('${m.nome}', '${a}')" class="text-xs px-2 py-1 rounded-md transition hover:opacity-80 cursor-pointer" style="background: rgba(59,130,246,0.1); color: var(--azul);">${a}</button>`
+        ).join('');
+        const maisAreas = areas.length > 6 ? `<span class="text-xs px-2 py-1 rounded-md" style="color: var(--texto-claro);">+${areas.length - 6} mais</span>` : '';
+        
+        return `
+        <div class="cartao cartao-hover p-5">
+            <div class="flex items-center gap-3 mb-3">
+                <span class="text-3xl">${m.icone}</span>
+                <h3 class="font-bold text-lg">${m.nome}</h3>
+            </div>
+            <p class="text-xs mb-2 font-semibold" style="color: var(--texto-claro);">📂 Áreas para estudar:</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+                ${areasHtml}
+                ${maisAreas}
+            </div>
+            <div class="flex gap-2">
+                <button onclick="document.getElementById('temaInput').value='${m.nome}'; mostrarAba('gerador');" 
+                    class="flex-1 py-2 text-sm rounded-lg font-medium transition hover:opacity-80"
+                    style="background: rgba(124,58,237,0.1); color: var(--roxo);">
+                    🤖 Geral
+                </button>
+                <button onclick="abrirModalAreas('${m.nome}')" 
+                    class="flex-1 py-2 text-sm rounded-lg font-medium transition hover:opacity-80"
+                    style="background: rgba(59,130,246,0.1); color: var(--azul);">
+                    📂 Ver Áreas
+                </button>
+            </div>
+        </div>
+    `}).join('');
+}
+
+function abrirModalAreas(materia) {
+    const areas = getAreasMateria(materia);
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-[70] p-4';
+    modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+    modal.innerHTML = `
+        <div class="cartao p-5 w-full max-w-md max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">📂 Áreas de ${materia}</h3>
+                <button onclick="this.closest('.fixed').remove()" class="text-2xl" style="color: var(--texto-claro);">&times;</button>
+            </div>
+            <p class="text-sm mb-4" style="color: var(--texto-claro);">Escolha uma área para focar seus estudos:</p>
+            <div class="space-y-2">
+                ${areas.map(a => `
+                    <button onclick="selecionarArea('${materia}', '${a}'); this.closest('.fixed').remove();" 
+                        class="w-full text-left p-3 rounded-xl font-medium transition hover:opacity-80 text-sm"
+                        style="background: rgba(59,130,246,0.08); color: var(--azul);">
+                        📚 ${a}
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+
+function renderizarCartoes() {
+    const container = document.getElementById('listaCartoes');
+    const sem = document.getElementById('semCartoes');
+    document.getElementById('statCards').textContent = estado.cartoes.length;
+    
+    if (estado.cartoes.length === 0) {
+        container.innerHTML = '';
+        sem.classList.remove('escondido');
+        return;
+    }
+    
+    sem.classList.add('escondido');
+    container.innerHTML = estado.cartoes.slice().reverse().map(c => `
+        <div class="cartao p-4">
+            <span class="text-xs px-2 py-1 rounded-md" style="background: rgba(59,130,246,0.1); color: var(--azul);">${c.materia}</span>
+            <p class="font-semibold mt-2 mb-1">${escapeHtml(c.pergunta)}</p>
+            <p class="text-sm line-clamp-2" style="color: var(--texto-claro);">${escapeHtml(c.resposta)}</p>
+            <div class="flex justify-between items-center mt-3 pt-3" style="border-top: 1px solid var(--borda);">
+                <span class="text-xs" style="color: var(--texto-claro);">Revisões: ${c.revisoes}</span>
+                <button onclick="excluirCartao(${c.id})" class="text-xs text-red-500 hover:text-red-700">🗑️ Excluir</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function atualizarStats() {
+    const hoje = new Date().toISOString().split('T')[0];
+    const min = estado.estatisticas[hoje] || 0;
+    const h = Math.floor(min / 60);
+    const m = min % 60;
+    document.getElementById('statHoje').textContent = `${h}h ${m}m`;
+    
+    const meta = 120;
+    const progresso = Math.min(100, Math.floor((min / meta) * 100));
+    document.getElementById('metaBarra').style.width = progresso + '%';
+    document.getElementById('metaTexto').textContent = progresso + '%';
+    
+    document.getElementById('statXP').textContent = estado.xp;
+    document.getElementById('statStreak').textContent = estado.streak;
+}
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+
+// ============================================================
+//               CHAT IA - GOOGLE GEMINI (COM ACESSO À WEB)
+// ============================================================
+const CHAVE_API_IA = 'educaultra_gemini_key';
+let historicoChat = [];
+
+function getApiKey() {
+    return localStorage.getItem(CHAVE_API_IA) || '';
+}
+
+function salvarApiKey() {
+    const chave = document.getElementById('apiKeyInput').value.trim();
+    if (!chave) {
+        mostrarToast('❌ Cole uma chave de API válida', 'erro');
+        return;
+    }
+    localStorage.setItem(CHAVE_API_IA, chave);
+    document.getElementById('avisoIA').style.display = 'none';
+    verificarStatusIA();
+    mostrarToast('✅ Chave salva! IA com acesso à web ativada!', 'sucesso');
+}
+
+function mostrarAvisoIA() {
+    const aviso = document.getElementById('avisoIA');
+    aviso.style.display = aviso.style.display === 'none' ? 'block' : 'none';
+    document.getElementById('apiKeyInput').value = getApiKey();
+}
+
+function verificarStatusIA() {
+    const status = document.getElementById('statusIA');
+    if (getApiKey()) {
+        status.textContent = '🌐 IA Conectada — Acesso à web ativado';
+        status.style.cssText = 'background: rgba(34,197,94,0.15); color: #16a34a;';
+        document.getElementById('avisoIA').style.display = 'none';
+    } else {
+        status.textContent = '⚠️ Configure a chave API para usar a IA';
+        status.style.cssText = 'background: rgba(245,158,11,0.15); color: #d97706;';
+        document.getElementById('avisoIA').style.display = 'block';
+    }
+}
+
+function adicionarMensagem(texto, tipo) {
+    const chatArea = document.getElementById('chatArea');
+    const div = document.createElement('div');
+    div.className = 'mb-4 ' + (tipo === 'usuario' ? 'text-right' : 'text-left');
+    
+    const bolha = document.createElement('div');
+    bolha.className = 'inline-block max-w-[85%] p-3 rounded-2xl text-sm text-left whitespace-pre-wrap';
+    
+    if (tipo === 'usuario') {
+        bolha.style.cssText = 'background: linear-gradient(135deg, #10b981, #059669); color: white; border-bottom-right-radius: 4px;';
+        bolha.textContent = texto;
+    } else if (tipo === 'ia') {
+        bolha.style.cssText = 'background: var(--fundo); color: var(--texto); border: 1px solid var(--borda); border-bottom-left-radius: 4px;';
+        bolha.textContent = texto;
+    } else {
+        bolha.style.cssText = 'background: var(--fundo); color: var(--texto-claro); border: 1px solid var(--borda); border-bottom-left-radius: 4px;';
+        bolha.innerHTML = '<span class="carga" style="border-color: rgba(16,185,129,0.3); border-top-color: #10b981;"></span> Buscando na web e pensando...';
+    }
+    
+    div.appendChild(bolha);
+    chatArea.appendChild(div);
+    chatArea.scrollTop = chatArea.scrollHeight;
+    return bolha;
+}
+
+function perguntaRapida(texto) {
+    document.getElementById('perguntaInput').value = texto;
+    enviarPergunta();
+}
+
+async function enviarPergunta() {
+    const input = document.getElementById('perguntaInput');
+    const pergunta = input.value.trim();
+    if (!pergunta) return;
+    
+    const apiKey = getApiKey();
+    if (!apiKey) {
+        mostrarToast('⚠️ Configure a chave API primeiro (botão ⚙️)', 'erro');
+        mostrarAvisoIA();
+        return;
+    }
+    
+    input.value = '';
+    const btn = document.getElementById('btnEnviarIA');
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    
+    // Limpar mensagem inicial se for a primeira
+    const chatArea = document.getElementById('chatArea');
+    if (chatArea.querySelector('.text-center')) {
+        chatArea.innerHTML = '';
+    }
+    
+    adicionarMensagem(pergunta, 'usuario');
+    const bolhaCarregando = adicionarMensagem('', 'carregando');
+    
+    historicoChat.push({ role: 'user', parts: [{ text: pergunta }] });
+    
+    try {
+        // Google Gemini 2.0 Flash com BUSCA NA WEB (grounding)
+        const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + apiKey;
+        
+        const corpo = {
+            contents: historicoChat,
+            tools: [{ google_search: {} }],  // 🌐 Ativa busca na web!
+            generationConfig: {
+                temperature: 0.7,
+                maxOutputTokens: 2048
+            },
+            systemInstruction: {
+                parts: [{
+                    text: 'Você é um assistente de estudos especializado em ajudar estudantes brasileiros. Responda em português do Brasil, de forma clara, didática e com exemplos. Use a busca na web quando precisar de informações atualizadas. Formate respostas com tópicos e exemplos práticos. Seja encorajador e positivo.'
+                }]
+            }
+        };
+        
+        const resposta = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(corpo)
+        });
+        
+        const dados = await resposta.json();
+        
+        if (dados.error) {
+            throw new Error(dados.error.message || 'Erro na API');
+        }
+        
+        const textoResposta = dados.candidates[0].content.parts
+            .filter(p => p.text)
+            .map(p => p.text)
+            .join('');
+        
+        bolhaCarregando.textContent = textoResposta || 'Desculpe, não consegui gerar uma resposta.';
+        bolhaCarregando.style.cssText = 'background: var(--fundo); color: var(--texto); border: 1px solid var(--borda); border-bottom-left-radius: 4px;';
+        
+        historicoChat.push({ role: 'model', parts: [{ text: textoResposta }] });
+        
+        // Ganhar XP por usar a IA
+        adicionarXP(2);
+        
+    } catch (erro) {
+        bolhaCarregando.textContent = '❌ Erro: ' + erro.message + '\n\nVerifique sua chave API em: https://aistudio.google.com/app/apikey';
+        bolhaCarregando.style.cssText = 'background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-bottom-left-radius: 4px;';
+        historicoChat.pop(); // remover pergunta do histórico em caso de erro
+    }
+    
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+
+function inicializarApp() {
+    // Aplicar tema
+    if (estado.temaEscuro) {
+        document.body.classList.add('dark');
+        document.getElementById('textoTema').textContent = 'Modo Claro';
+    }
+    
+    // Aplicar nível
+    document.getElementById('nivelSelect').value = estado.nivel;
+    
+    // Renderizar tudo
+    renderizarMaterias();
+    renderizarCartoes();
+    renderizarRanking();
+    atualizarStats();
+    verificarStatusIA();
+    
+    // Fechar modais ao clicar fora
+    document.querySelectorAll('.fixed.inset-0').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this && this.id !== 'menuUsuario') {
+                this.classList.add('escondido');
+            }
+        });
+    });
+}
+
+// ============================================================
+//               POMODORO, FLASHCARDS, GERADOR
+// ============================================================
+
+// POMODORO
+function alternarTimer() {
+    const p = estado.pomodoro;
+    if (p.rodando) {
+        clearInterval(p.intervalo);
+        p.rodando = false;
+        document.getElementById('timerBtn').innerHTML = '<i class="ri-play-fill mr-1"></i> Continuar';
+    } else {
+        p.rodando = true;
+        document.getElementById('timerBtn').innerHTML = '<i class="ri-pause-fill mr-1"></i> Pausar';
+        p.intervalo = setInterval(() => {
+            if (p.tempoRestante > 0) {
+                p.tempoRestante--;
+                atualizarDisplayPomodoro();
+            } else {
+                clearInterval(p.intervalo);
+                p.rodando = false;
+                trocarModoPomodoro();
+            }
+        }, 1000);
+    }
+}
+
+function resetarTimer() {
+    const p = estado.pomodoro;
+    clearInterval(p.intervalo);
+    p.rodando = false;
+    p.tempoRestante = p.modoEstudo ? p.tempoEstudo : p.tempoDescanso;
+    atualizarDisplayPomodoro();
+    document.getElementById('timerBtn').innerHTML = '<i class="ri-play-fill mr-1"></i> Iniciar';
+}
+
+function configurarPomodoro(estudo, descanso, btn) {
+    const p = estado.pomodoro;
+    clearInterval(p.intervalo);
+    p.rodando = false;
+    p.tempoEstudo = estudo * 60;
+    p.tempoDescanso = descanso * 60;
+    p.tempoRestante = estudo * 60;
+    p.modoEstudo = true;
+    atualizarDisplayPomodoro();
+    document.getElementById('timerBtn').innerHTML = '<i class="ri-play-fill mr-1"></i> Iniciar';
+    document.getElementById('pomodoroStatus').innerHTML = '⏱️ Tempo de Estudo';
+    document.getElementById('pomodoroStatus').style.cssText = 'background: #fef2f2; color: #dc2626;';
+    
+    document.querySelectorAll('.preset-ativo').forEach(b => {
+        b.classList.remove('preset-ativo');
+        b.style.background = 'var(--borda)';
+        b.style.color = 'var(--texto-claro)';
+    });
+    if (btn) {
+        btn.classList.add('preset-ativo');
+        btn.style.background = 'rgba(59,130,246,0.1)';
+        btn.style.color = 'var(--azul)';
+    }
+}
+
+function atualizarDisplayPomodoro() {
+    const t = estado.pomodoro.tempoRestante;
+    const m = Math.floor(t / 60);
+    const s = t % 60;
+    document.getElementById('timerDisplay').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function trocarModoPomodoro() {
+    const p = estado.pomodoro;
+    p.modoEstudo = !p.modoEstudo;
+    const status = document.getElementById('pomodoroStatus');
+    
+    if (p.modoEstudo) {
+        p.tempoRestante = p.tempoEstudo;
+        status.innerHTML = '⏱️ Tempo de Estudo';
+        status.style.cssText = 'background: #fef2f2; color: #dc2626;';
+        p.ciclo = Math.min(p.ciclo + 1, 4);
+        atualizarDots();
+        alert('☕ Descanso acabou! Hora de focar! 💪');
+    } else {
+        p.tempoRestante = p.tempoDescanso;
+        status.innerHTML = '🌿 Tempo de Descanso';
+        status.style.cssText = 'background: #dcfce7; color: #16a34a;';
+        registrarTempoEstudo(Math.floor(p.tempoEstudo / 60));
+        alert('✅ Pomodoro concluído! Descanse um pouco! ☕');
+    }
+    atualizarDisplayPomodoro();
+    document.getElementById('timerBtn').innerHTML = '<i class="ri-play-fill mr-1"></i> Iniciar';
+}
+
+function atualizarDots() {
+    for (let i = 1; i <= 4; i++) {
+        const dot = document.getElementById('dot' + i);
+        if (dot) dot.style.background = i <= estado.pomodoro.ciclo ? '#dc2626' : 'var(--borda)';
+    }
+    document.getElementById('cicloAtual').textContent = estado.pomodoro.ciclo;
+}
+
+function iniciarRapido() {
+    configurarPomodoro(15, 3, null);
+    mostrarAba('pomodoro');
+    setTimeout(() => alternarTimer(), 300);
+}
+
+function registrarTempoEstudo(minutos) {
+    const hoje = new Date().toISOString().split('T')[0];
+    if (!estado.estatisticas[hoje]) estado.estatisticas[hoje] = 0;
+    estado.estatisticas[hoje] += minutos;
+    estado.ultimoEstudo = hoje;
+    if (estado.streak === 0) estado.streak = 1;
+    atualizarDesafios('pomodoro', minutos);
+    adicionarXP(10);
+    salvarDadosUsuario();
+    atualizarStats();
+}
+
+function adicionarXP(qtd) {
+    const nivelAntes = getNivelAtual(estado.xp);
+    estado.xp += qtd;
+    const nivelDepois = getNivelAtual(estado.xp);
+    
+    document.getElementById('statXP').textContent = estado.xp;
+    
+    // Verificar se subiu de nível
+    if (nivelDepois.nome !== nivelAntes.nome) {
+        setTimeout(() => {
+            mostrarToast('🎉 SUBIU DE NÍVEL! Agora você é ' + nivelDepois.icone + ' ' + nivelDepois.nome + '!', 'sucesso');
+        }, 500);
+    }
+    
+    salvarDadosUsuario();
+    
+    // 🔥 SINCRONIZAR XP COM O FIREBASE (ranking em tempo real)
+    sincronizarXPFirebase();
+    
+    // Atualizar ranking se estiver visível
+    const abaRanking = document.getElementById('aba-ranking');
+    if (abaRanking && abaRanking.classList.contains('active')) {
+        renderizarRanking();
+    }
+    // Atualizar stats no painel
+    atualizarStats();
+}
+
+// GERADOR
+function gerarPerguntas() {
+    const tema = document.getElementById('temaInput').value.trim();
+    if (!tema) {
+        alert('Digite um tema primeiro!');
+        document.getElementById('temaInput').focus();
+        return;
+    }
+    
+    const btn = document.getElementById('btnGerar');
+    const textoOriginal = btn.innerHTML;
+    btn.innerHTML = '<span class="carga"></span> Gerando...';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        const materia = document.getElementById('materiaGerador').value;
+        const qtd = document.getElementById('qtdPerguntas').value;
+        const dif = document.getElementById('dificuldadeGerador').value;
+        
+        estado.perguntasGeradas = gerarPerguntasDoTema(tema, materia, qtd, dif);
+        
+        const container = document.getElementById('listaGerada');
+        container.innerHTML = estado.perguntasGeradas.map((pg, i) => `
+            <div class="cartao p-4">
+                <div class="flex items-start gap-3 mb-3">
+                    <span class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0" 
+                        style="background: linear-gradient(135deg, var(--azul), var(--roxo));">${i+1}</span>
+                    <div class="flex-1">
+                        <p class="font-semibold mb-2">${pg.p}</p>
+                        <p class="text-sm" style="color: var(--texto-claro);">${pg.r}</p>
+                    </div>
+                </div>
+                <button onclick="adicionarCartaoIndividual(${i}, this)" 
+                    class="w-full py-2 text-sm rounded-lg font-medium transition hover:opacity-80"
+                    style="background: rgba(59,130,246,0.1); color: var(--azul);">
+                    ➕ Adicionar aos Flashcards
+                </button>
+            </div>
+        `).join('');
+        
+        document.getElementById('resultadoGeracao').classList.remove('escondido');
+        btn.innerHTML = textoOriginal;
+        btn.disabled = false;
+        atualizarDesafios('ia', estado.perguntasGeradas.length);
+        adicionarXP(5);
+        mostrarToast('✨ Perguntas geradas!', 'sucesso');
+    }, 1000);
+}
+
+function adicionarCartaoIndividual(indice, btn) {
+    const pg = estado.perguntasGeradas[indice];
+    const materia = document.getElementById('materiaGerador').value;
+    const dif = document.getElementById('dificuldadeGerador').value;
+    
+    estado.cartoes.push({
+        id: Date.now() + indice,
+        pergunta: pg.p,
+        resposta: pg.r,
+        materia: materia,
+        dificuldade: dif,
+        intervalo: 1,
+        proximaRevisao: new Date().toISOString().split('T')[0],
+        revisoes: 0
+    });
+    
+    salvarDadosUsuario();
+    renderizarCartoes();
+    
+    btn.innerHTML = '✅ Adicionado!';
+    btn.style.background = 'rgba(22,163,74,0.1)';
+    btn.style.color = '#16a34a';
+    btn.disabled = true;
+    
+    adicionarXP(3);
+}
+
+function adicionarTodas() {
+    const materia = document.getElementById('materiaGerador').value;
+    const dif = document.getElementById('dificuldadeGerador').value;
+    let adicionados = 0;
+    
+    estado.perguntasGeradas.forEach((pg, i) => {
+        estado.cartoes.push({
+            id: Date.now() + i,
+            pergunta: pg.p,
+            resposta: pg.r,
+            materia: materia,
+            dificuldade: dif,
+            intervalo: 1,
+            proximaRevisao: new Date().toISOString().split('T')[0],
+            revisoes: 0
+        });
+        adicionados++;
+    });
+    
+    salvarDadosUsuario();
+    renderizarCartoes();
+    atualizarDesafios('cartoes', adicionados);
+    adicionarXP(adicionados * 2);
+    mostrarToast(`✅ ${adicionados} cartões adicionados!`, 'sucesso');
+    
+    document.getElementById('resultadoGeracao').classList.add('escondido');
+    document.getElementById('temaInput').value = '';
+}
+
+// FLASHCARDS
+function abrirModalCartao() {
+    document.getElementById('modalCartao').classList.remove('escondido');
+}
+
+function fecharModalCartao() {
+    document.getElementById('modalCartao').classList.add('escondido');
+    document.getElementById('perguntaInput').value = '';
+    document.getElementById('respostaInput').value = '';
+}
+
+function salvarCartao() {
+    const p = document.getElementById('perguntaInput').value.trim();
+    const r = document.getElementById('respostaInput').value.trim();
+    const m = document.getElementById('materiaCartao').value;
+    
+    if (!p || !r) {
+        alert('Preencha a pergunta e a resposta!');
+        return;
+    }
+    
+    estado.cartoes.push({
+        id: Date.now(),
+        pergunta: p,
+        resposta: r,
+        materia: m,
+        dificuldade: 'medio',
+        intervalo: 1,
+        proximaRevisao: new Date().toISOString().split('T')[0],
+        revisoes: 0
+    });
+    
+    salvarDadosUsuario();
+    fecharModalCartao();
+    renderizarCartoes();
+    atualizarDesafios('cartoes', 1);
+    adicionarXP(3);
+    mostrarToast('💾 Cartão salvo!', 'sucesso');
+}
+
+function excluirCartao(id) {
+    if (!confirm('Excluir este cartão?')) return;
+    estado.cartoes = estado.cartoes.filter(c => c.id !== id);
+    salvarDadosUsuario();
+    renderizarCartoes();
+}
+
+// REVISÃO
+function iniciarRevisao() {
+    const hoje = new Date().toISOString().split('T')[0];
+    const paraRevisar = estado.cartoes.filter(c => c.proximaRevisao <= hoje);
+    
+    if (paraRevisar.length === 0) {
+        alert('Nenhum cartão para revisar hoje! Use o Gerador IA para criar novos.');
+        return;
+    }
+    
+    estado.revisao = { lista: paraRevisar, indice: 0, virado: false };
+    document.getElementById('modalRevisao').classList.remove('escondido');
+    atualizarCartaoRevisao();
+}
+
+function fecharRevisao() {
+    document.getElementById('modalRevisao').classList.add('escondido');
+    renderizarCartoes();
+}
+
+function atualizarCartaoRevisao() {
+    const r = estado.revisao;
+    const cartao = r.lista[r.indice];
+    document.getElementById('contagemRevisao').textContent = `${r.indice + 1} de ${r.lista.length}`;
+    document.getElementById('textoFrente').textContent = cartao.pergunta;
+    document.getElementById('textoVerso').textContent = cartao.resposta;
+    r.virado = false;
+    document.getElementById('cartaoRevisao').classList.remove('virado');
+}
+
+function virarCartao() {
+    estado.revisao.virado = !estado.revisao.virado;
+    document.getElementById('cartaoRevisao').classList.toggle('virado', estado.revisao.virado);
+}
+
+function avaliar(dificuldade) {
+    const r = estado.revisao;
+    const cartao = r.lista[r.indice];
+    
+    if (dificuldade === 'facil') cartao.intervalo = Math.ceil(cartao.intervalo * 2.5);
+    else if (dificuldade === 'medio') cartao.intervalo = Math.ceil(cartao.intervalo * 1.5);
+    else cartao.intervalo = 1;
+    
+    cartao.revisoes++;
+    const proxima = new Date();
+    proxima.setDate(proxima.getDate() + cartao.intervalo);
+    cartao.proximaRevisao = proxima.toISOString().split('T')[0];
+    
+    salvarDadosUsuario();
+    adicionarXP(3);
+    atualizarDesafios('revisao', 1);
+    
+    if (r.indice < r.lista.length - 1) {
+        r.indice++;
+        atualizarCartaoRevisao();
+    } else {
+        alert('🎉 Sessão de revisão concluída! Excelente!');
+        fecharRevisao();
+    }
+}
+
+// ============================================================
+//                    INICIAR APLICAÇÃO
+// ============================================================
+
+// Verificar login ao carregar
+verificarLogin();
+
+// Salvar dados ao fechar a página
+window.addEventListener('beforeunload', salvarDadosUsuario);
+
+// Auto-salvar a cada 30 segundos
+setInterval(salvarDadosUsuario, 30000);
+
+console.log('📘 EducaUltra.V5.0 v3.0 carregado! Sistema de login ativo.');
+</script>
+</body>
+</html>
